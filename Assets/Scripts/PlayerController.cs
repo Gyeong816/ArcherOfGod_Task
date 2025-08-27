@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private int _isDeadHash;
     private int _victory;
     private bool _isDead;
+    private bool _isWon;
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -103,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        if(_isDead)
+        if(_isDead || _isWon) 
             return;
         _animator.SetTrigger(_isDeadHash);
         _isDead = true;
@@ -111,6 +112,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnVictory()
     {
+        _isWon = true;
         _animator.SetTrigger(_victory);
     }
 }

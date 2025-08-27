@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class StraightArrowSkill : BaseSkill
 {
-    private CombatObjectPool projectilePool;
-    private Transform shootPoint;
+    private CombatObjectPool _combatObjectPool;
+    private Transform _targetPoint;
 
-    public override void Activate(Transform caster, Transform target)
+    public override void Activate(Transform caster, Transform target, CombatObjectPool combatObjectPool)
     {
-        GameObject straightArrow = projectilePool.Get(PoolType.StraightArrow);
-        straightArrow.transform.position = shootPoint.position;
-
-        Rigidbody2D rb = straightArrow.GetComponent<Rigidbody2D>();
-        rb.velocity = (caster.localScale.x > 0 ? Vector2.right : Vector2.left) * 10f;
+        GameObject straightArrow = combatObjectPool.Get(PoolType.StraightArrow);
+        
+        straightArrow.transform.position = caster.position;
+        straightArrow.transform.rotation = Quaternion.identity;
+        
+        StraightArrow arrow = straightArrow.GetComponent<StraightArrow>();
+        arrow.Initialize(target.position, combatObjectPool);
     }
 }

@@ -1,16 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillManager : MonoBehaviour
 {
-    [SerializeField] private List<BaseSkill> playerSkills; 
+   
     [SerializeField] private List<Button> skillButtons;
     [SerializeField] private List<TextMeshProUGUI> cooldownTexts;
+    [SerializeField] private List<BaseSkill> skills;
+
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private EnemyController enemyController;
+    [SerializeField] private CombatObjectPool combatObjectPool;
     
-    
+     private List<BaseSkill> _playerSkills = new List<BaseSkill>(); 
+     private List<BaseSkill> _enemySkills = new List<BaseSkill>(); 
+
+    private void Awake()
+    {
+        for (int i = 0; i < skills.Count; i++)
+        {
+            _playerSkills.Add(skills[i]);
+        }
+        for (int i = 0; i < skills.Count; i++)
+        {
+            _enemySkills.Add(skills[i]);
+        }
+    }
+
     private void Start()
     {
         for (int i = 0; i < skillButtons.Count; i++)
@@ -22,43 +43,46 @@ public class SkillManager : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < playerSkills.Count; i++)
+        for (int i = 0; i < _playerSkills.Count; i++)
         {
+            BaseSkill skill = _playerSkills[i];
             
-            float remaining = playerSkills[i].GetRemainingCooldown();
+            skill.TickCooldown(Time.deltaTime);
+            
+            float remaining = skill.GetRemainingCooldown();
 
-            if (remaining > 0)
+            if (remaining > 0f)
             {
-                cooldownTexts[i].text = remaining.ToString("F1"); 
-                skillButtons[i].interactable = false;          
+                cooldownTexts[i].text = Mathf.CeilToInt(remaining).ToString();
+                skillButtons[i].interactable = false;
             }
             else
             {
                 cooldownTexts[i].text = "";
-                skillButtons[i].interactable = true;         
+                skillButtons[i].interactable = true;
             }
         }
     }
 
     private void UsePlayerSkill(int skillNum)
     {
-        if (skillNum < 0 || skillNum >= playerSkills.Count) return;
+        if (skillNum < 0 || skillNum >= _playerSkills.Count) return;
 
-        var skill = playerSkills[skillNum];
+        var skill = _playerSkills[skillNum];
         if (skill != null)
         {
-            skill.TryActivate(transform, null); 
+            skill.TryActivate(playerController.transform, enemyController.transform, combatObjectPool);
         }
     }
 
     private void UseEnemySkill(int skillNum)
     {
-        if (skillNum < 0 || skillNum >= playerSkills.Count) return;
+        if (skillNum < 0 || skillNum >= _playerSkills.Count) return;
 
-        var skill = playerSkills[skillNum];
+        var skill = _playerSkills[skillNum];
         if (skill != null)
         {
-            skill.TryActivate(transform, null); 
+          //  skill.TryActivate(transform, null); 
         }
     }
 }

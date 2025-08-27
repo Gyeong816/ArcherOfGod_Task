@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour
     public int VictoryHash { get; private set; }
 
     private IEnemyState _currentState;
-    private bool _isDead;
+    
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
@@ -69,9 +69,7 @@ public class EnemyController : MonoBehaviour
 
     public void Die()
     {
-        if (_isDead) return;
         ChangeState(new EnemyDeadState());
-        _isDead = true;
     }
     
     public void OnVictory()

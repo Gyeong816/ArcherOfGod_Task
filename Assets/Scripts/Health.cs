@@ -10,6 +10,7 @@ public class Health : MonoBehaviour
     [SerializeField] private CharacterType characterType;
     
     private int _currentHp;
+    private bool _isDead = false;
 
     private void Awake()
     {
@@ -18,13 +19,19 @@ public class Health : MonoBehaviour
     }
     public void TakeDamage(int damage)
     {
+        if (_isDead) return; 
         _currentHp -= damage;
         _currentHp = Mathf.Max(_currentHp, 0);
         
         hpSlider.value = _currentHp;
 
         if (_currentHp <= 0)
+        {
+            _currentHp = 0;
+            _isDead = true;
+
             Die();
+        }
     }
 
     private void Die()

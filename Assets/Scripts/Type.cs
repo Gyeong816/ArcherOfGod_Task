@@ -11,3 +11,10 @@ public enum PoolType
     FlyArrow,
     Explosion
 }
+
+public enum SkillType
+{
+    StraightArrow,
+    JumpShot,
+    Fireball,
+}
