@@ -7,7 +7,10 @@ public class EnemyController : MonoBehaviour
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
-    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Transform playerTargetTransform;
+    
+    public Transform targetTransform;
+    public Transform ShootPoint => shootPoint;
     
     public float moveDurationMax = 4f;
     public float moveDurationMin = 1f;
@@ -57,14 +60,14 @@ public class EnemyController : MonoBehaviour
 
     public void FireArrow()
     {
-        if (playerTransform == null) return;
+        if (playerTargetTransform == null) return;
         
         GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
         arrowObj.transform.position = shootPoint.position;
         arrowObj.transform.rotation = Quaternion.identity;
 
         Arrow arrow = arrowObj.GetComponent<Arrow>();
-        arrow.Initialize(playerTransform.position, combatObjectPool);
+        arrow.Initialize(playerTargetTransform.position, combatObjectPool);
     }
 
     public void Die()

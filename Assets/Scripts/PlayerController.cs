@@ -11,9 +11,11 @@ public class PlayerController : MonoBehaviour
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
-    [SerializeField] private Transform enemyTransform;
     [SerializeField] private float fireTime = 0.7f;
+    [SerializeField] private Transform enemyTargetTransform;
     
+    public Transform  targetTransform;
+    public Transform  ShootPoint => shootPoint;
     
     private bool _hasFired = false;
     private Rigidbody2D _rigidbody2D;
@@ -92,14 +94,14 @@ public class PlayerController : MonoBehaviour
     }
     private void FireArrow()
     {
-        if (enemyTransform == null) return;
+        if (enemyTargetTransform == null) return;
         
         GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
         arrowObj.transform.position = shootPoint.position;
         arrowObj.transform.rotation = Quaternion.identity;
         
         Arrow arrow = arrowObj.GetComponent<Arrow>();
-        arrow.Initialize(enemyTransform.position, combatObjectPool);
+        arrow.Initialize(enemyTargetTransform.position, combatObjectPool);
     }
 
     public void Die()

@@ -6,21 +6,18 @@ public class StraightArrow : MonoBehaviour
 {
     [SerializeField] private float speed = 10f; 
     [SerializeField] private int damage = 20;    
-    [SerializeField] private float lifeTime = 3f; 
+    [SerializeField] private float lifeTime = 10f; 
 
     private Vector3 _direction;
     private CombatObjectPool _pool;
     private float _timer;
     
-    public void Initialize(Vector3 targetPos, CombatObjectPool pool)
+    public void Initialize(CombatObjectPool pool, Vector3 direction)
     {
         _pool = pool;
+        _direction = direction;
+        
         _timer = 0f;
-        
-        _direction = (targetPos - transform.position).normalized;
-        
-        float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     private void Update()

@@ -26,14 +26,10 @@ public abstract class BaseSkill : MonoBehaviour
         return Mathf.Max(0f, cooldownTimer);
     }
     
-    public void TryActivate(Transform caster, Transform target, CombatObjectPool pool)
+    public void SetTimer()
     {
-        if (CanUse())
-        {
-            Activate(caster, target, pool);
-            cooldownTimer = cooldown; 
-        }
+         cooldownTimer = cooldown; 
     }
 
-    public abstract void Activate(Transform caster, Transform target, CombatObjectPool pool);
+    public abstract void Activate(PlayerController player, EnemyController enemy, CombatObjectPool pool, CharacterType characterType);
 }

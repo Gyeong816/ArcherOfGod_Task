@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class StraightArrowSkill : BaseSkill
 {
-    private CombatObjectPool _combatObjectPool;
-    private Transform _targetPoint;
-
-    public override void Activate(Transform caster, Transform target, CombatObjectPool combatObjectPool)
+    public override void Activate(PlayerController playerController, EnemyController enemyController, CombatObjectPool combatObjectPool, CharacterType characterType)
     {
-        GameObject straightArrow = combatObjectPool.Get(PoolType.StraightArrow);
-        
-        straightArrow.transform.position = caster.position;
-        straightArrow.transform.rotation = Quaternion.identity;
-        
-        StraightArrow arrow = straightArrow.GetComponent<StraightArrow>();
-        arrow.Initialize(target.position, combatObjectPool);
+        if (characterType == CharacterType.Player)
+        {
+            GameObject straightArrow = combatObjectPool.Get(PoolType.StraightArrow);
+            straightArrow.transform.position = playerController.ShootPoint.position;
+            straightArrow.transform.localScale = new Vector3(1, 1, 1);
+            StraightArrow arrow = straightArrow.GetComponent<StraightArrow>();
+            arrow.Initialize(combatObjectPool, Vector3.right);
+        }
+        else if (characterType == CharacterType.Enemy)
+        {
+            GameObject straightArrow = combatObjectPool.Get(PoolType.StraightArrow);
+            straightArrow.transform.position = enemyController.ShootPoint.position;
+            straightArrow.transform.localScale = new Vector3(-1, 1, 1);
+            StraightArrow arrow = straightArrow.GetComponent<StraightArrow>();
+            arrow.Initialize(combatObjectPool, Vector3.left);
+        }
     }
 }

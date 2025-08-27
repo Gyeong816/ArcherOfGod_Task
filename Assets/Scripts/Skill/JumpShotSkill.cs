@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpShotSkill : MonoBehaviour
+public class JumpShotSkill : BaseSkill
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Activate(PlayerController playerController, EnemyController enemyController, CombatObjectPool combatObjectPool, CharacterType characterType)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (characterType == CharacterType.Player)
+        {
+           
+        }
+        else if (characterType == CharacterType.Enemy)
+        {
+      
+        }
     }
 }

@@ -71,7 +71,8 @@ public class SkillManager : MonoBehaviour
         var skill = _playerSkills[skillNum];
         if (skill != null)
         {
-            skill.TryActivate(playerController.transform, enemyController.transform, combatObjectPool);
+            skill.Activate(playerController, enemyController, combatObjectPool, CharacterType.Player);
+            skill.SetTimer();
         }
     }
 
@@ -82,7 +83,8 @@ public class SkillManager : MonoBehaviour
         var skill = _playerSkills[skillNum];
         if (skill != null)
         {
-          //  skill.TryActivate(transform, null); 
+            skill.Activate(playerController, enemyController, combatObjectPool, CharacterType.Enemy);
+            skill.SetTimer();
         }
     }
 }
