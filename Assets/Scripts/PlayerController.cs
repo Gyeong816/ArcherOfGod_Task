@@ -8,21 +8,34 @@ public class PlayerController : MonoBehaviour
     [Header("플레이어 설정")]
     [SerializeField] private float moveSpeed = 5f;
     
+    [Header("활 설정")]
+    [SerializeField] private CombatObjectPool combatObjectPool;
+    [SerializeField] private Transform shootPoint;   
+    [SerializeField] private Transform enemyTransform;
+    [SerializeField] private float fireTime = 0.7f;
+    
+    
+    private bool _hasFired = false;
     private Rigidbody2D _rigidbody2D;
     private float _moveInput;
     private Animator _animator;
-
     private int _isWalkingHash;
+    private int _isDeadHash;
+    private int _victory;
+    private bool _isDead;
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _isWalkingHash = Animator.StringToHash("IsWalking");
+        _isDeadHash = Animator.StringToHash("IsDead");
+        _victory = Animator.StringToHash("Victory");
     }
 
     private void Update()
     {
         _moveInput = Input.GetAxisRaw("Horizontal");
+       
         
         if (_moveInput != 0f)
         {
@@ -53,7 +66,51 @@ public class PlayerController : MonoBehaviour
     {
         transform.localScale = new Vector3(-1, 1, 1); 
         _animator.SetBool(_isWalkingHash, false);
+        
+        AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
+        
+        float cycleTime = state.normalizedTime % 1f; 
+
+        if (state.IsName("attack"))
+        {
+            if (!_hasFired && cycleTime >= fireTime)
+            {
+                _hasFired = true;
+                FireArrow(); 
+            }
+            if (_hasFired && cycleTime < fireTime)
+            {
+                _hasFired = false;
+            }
+        }
+        else
+        {
+            _hasFired = false;
+        }
+    
     }
-    
-    
+    private void FireArrow()
+    {
+        if (enemyTransform == null) return;
+        
+        GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
+        arrowObj.transform.position = shootPoint.position;
+        arrowObj.transform.rotation = Quaternion.identity;
+        
+        Arrow arrow = arrowObj.GetComponent<Arrow>();
+        arrow.Initialize(enemyTransform.position, combatObjectPool);
+    }
+
+    public void Die()
+    {
+        if(_isDead)
+            return;
+        _animator.SetTrigger(_isDeadHash);
+        _isDead = true;
+    }
+
+    public void OnVictory()
+    {
+        _animator.SetTrigger(_victory);
+    }
 }
