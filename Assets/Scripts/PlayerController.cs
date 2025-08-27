@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     
     public Transform  targetTransform;
     public Transform  ShootPoint => shootPoint;
+    public Animator Animator => _animator;
     
     private bool _hasFired = false;
     private Rigidbody2D _rigidbody2D;
@@ -24,8 +25,9 @@ public class PlayerController : MonoBehaviour
     private int _isWalkingHash;
     private int _isDeadHash;
     private int _victory;
-    private bool _isDead;
-    private bool _isWon;
+    private Queue<ICommand> skillQueue = new Queue<ICommand>();
+    private bool isExecutingSkill = false;
+
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -37,8 +39,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (isExecutingSkill)
+        { ; 
+            return;
+        }
+        
         _moveInput = Input.GetAxisRaw("Horizontal");
-       
         
         if (_moveInput != 0f)
         {
@@ -46,13 +52,32 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Attack(); 
+            if (skillQueue.Count > 0)
+            {
+                StartCoroutine(ProcessSkill(skillQueue.Dequeue()));
+            }
+            else
+            {
+                Attack();
+            }
         }
     }
-
+    
     private void FixedUpdate()
     {
         _rigidbody2D.velocity = new Vector2(_moveInput * moveSpeed, _rigidbody2D.velocity.y);
+    }
+    
+    public void EnqueueSkill(ICommand skillCommand)
+    {
+        skillQueue.Enqueue(skillCommand);
+    }
+    
+    private IEnumerator ProcessSkill(ICommand skill)
+    {
+        isExecutingSkill = true;
+        yield return StartCoroutine(skill.Execute(this));
+        isExecutingSkill = false;
     }
     
     private void Move()
@@ -106,15 +131,11 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        if(_isDead || _isWon) 
-            return;
         _animator.SetTrigger(_isDeadHash);
-        _isDead = true;
     }
 
     public void OnVictory()
     {
-        _isWon = true;
         _animator.SetTrigger(_victory);
     }
 }

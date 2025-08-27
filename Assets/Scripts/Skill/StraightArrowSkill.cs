@@ -6,6 +6,7 @@ public class StraightArrowSkill : BaseSkill
 {
     public override void Activate(PlayerController playerController, EnemyController enemyController, CombatObjectPool combatObjectPool, CharacterType characterType)
     {
+        
         if (characterType == CharacterType.Player)
         {
             GameObject straightArrow = combatObjectPool.Get(PoolType.StraightArrow);

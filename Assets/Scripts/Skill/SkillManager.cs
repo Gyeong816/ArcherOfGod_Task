@@ -69,9 +69,20 @@ public class SkillManager : MonoBehaviour
         if (skillNum < 0 || skillNum >= _playerSkills.Count) return;
 
         var skill = _playerSkills[skillNum];
-        if (skill != null)
+        if (skill != null && skill.CanUse())
         {
-            skill.Activate(playerController, enemyController, combatObjectPool, CharacterType.Player);
+         
+            var cmd = new SkillCommand(
+                skill,
+                CharacterType.Player,
+                playerController,
+                enemyController,
+                combatObjectPool,
+                skill.animName 
+            );
+            
+            playerController.EnqueueSkill(cmd);
+            
             skill.SetTimer();
         }
     }

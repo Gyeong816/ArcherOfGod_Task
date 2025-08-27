@@ -6,10 +6,11 @@ public abstract class BaseSkill : MonoBehaviour
 {
     public SkillType skillType;
     public float cooldown = 3f;
-
-    private float cooldownTimer = 0f; 
-
-
+    public float spawnTime = 0.5f;
+    private float cooldownTimer = 0f;
+    public string animName;
+    
+    
     public void TickCooldown(float deltaTime)
     {
         if (cooldownTimer > 0f)

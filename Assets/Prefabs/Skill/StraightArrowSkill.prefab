@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillType: 0
   cooldown: 3
+  spawnTime: 0.6
+  animName: StraightAttack
