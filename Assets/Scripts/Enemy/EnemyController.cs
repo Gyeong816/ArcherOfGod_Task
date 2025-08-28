@@ -33,6 +33,21 @@ public class EnemyController : MonoBehaviour
     private IEnemyState _currentState;
     private Collider2D _collider;
     
+    [Header("상태이상: 화상")]
+    [SerializeField] private int burnDamage = 3;
+    [SerializeField] private float burnInterval = 1f;
+    [SerializeField] private float burnDuration = 3f;
+    [SerializeField] private GameObject burnEffect;
+
+    [Header("상태이상: 동상")]
+    [SerializeField] private float freezeDuration = 2f;
+    [SerializeField] private float freezeSlowMultiplier = 0.3f;
+    [SerializeField] private GameObject freezeEffect;
+
+    private bool _isBurning = false;
+    private bool _isFrozen = false;
+    private float _originalMoveSpeed;
+    
     private void Awake()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -86,6 +101,50 @@ public class EnemyController : MonoBehaviour
         ChangeState(new EnemyVictoryState());
     }
     
+    public void ApplyBurn()
+    {
+        if (!_isBurning)
+            StartCoroutine(BurnRoutine());
+    }
+
+    private IEnumerator BurnRoutine()
+    {
+        _isBurning = true;
+        if (burnEffect != null) burnEffect.SetActive(true);
+
+        float elapsed = 0f;
+        while (elapsed < burnDuration)
+        {
+            CombatSystem.Instance.DealDamage(gameObject, burnDamage);
+            yield return new WaitForSeconds(burnInterval);
+            elapsed += burnInterval;
+        }
+
+        if (burnEffect != null) burnEffect.SetActive(false);
+        _isBurning = false;
+    }
+
+    public void ApplyFreeze()
+    {
+        if (!_isFrozen)
+            StartCoroutine(FreezeRoutine());
+    }
+
+    private IEnumerator FreezeRoutine()
+    {
+        _isFrozen = true;
+        if (freezeEffect != null) freezeEffect.SetActive(true);
+
+        _originalMoveSpeed = moveSpeed;
+        moveSpeed *= freezeSlowMultiplier;   // 이동 속도 감소
+
+        yield return new WaitForSeconds(freezeDuration);
+
+        moveSpeed = _originalMoveSpeed;      // 복구
+        if (freezeEffect != null) freezeEffect.SetActive(false);
+        _isFrozen = false;
+    }
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
@@ -97,7 +156,17 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("GroundFire"))
+        {
+            ApplyBurn();
+        }
+        if (other.CompareTag("GroundIce"))
+        {
+            ApplyFreeze();
+        }
+    }
     
     
 }

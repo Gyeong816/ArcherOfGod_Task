@@ -204,7 +204,6 @@ public class PlayerController : MonoBehaviour
         }
         if (other.CompareTag("GroundIce"))
         {
-            Debug.Log("GroundIce");
             ApplyFreeze();
         }
     }
