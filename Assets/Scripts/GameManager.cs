@@ -7,7 +7,14 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
     [SerializeField] private EnemyController enemyController;
+
     public static GameManager Instance { get; private set; }
+
+    private List<Shield> _playerShields = new List<Shield>();
+    private List<Shield> _enemyShields = new List<Shield>();
+
+    public Transform PlayerTarget { get; private set; }
+    public Transform EnemyTarget { get; private set; }
 
     private void Awake()
     {
@@ -17,6 +24,45 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
+        
+        PlayerTarget = enemyController.transform;
+        EnemyTarget = playerController.transform;
+    }
+    
+    public void RegisterShield(Shield shield)
+    {
+        if (shield.Owner == OwnerType.Player)
+        {
+            _playerShields.Add(shield);
+            EnemyTarget = shield.transform;
+        }
+        else
+        {
+            _enemyShields.Add(shield);
+            PlayerTarget = shield.transform;
+        }
+    }
+    
+    public void UnregisterShield(Shield shield)
+    {
+        if (shield.Owner == OwnerType.Player)
+        {
+            _playerShields.Remove(shield);
+
+            if (_playerShields.Count > 0)
+                EnemyTarget = _playerShields[0].transform;
+            else
+                EnemyTarget = playerController.transform; 
+        }
+        else
+        {
+            _enemyShields.Remove(shield);
+
+            if (_enemyShields.Count > 0)
+                PlayerTarget = _enemyShields[0].transform;
+            else
+                PlayerTarget = enemyController.transform;
+        }
     }
     
     public void OnPlayerDead()
@@ -30,4 +76,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("승리!");
         playerController.OnVictory();
     }
+    
+   
 }

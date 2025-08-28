@@ -8,7 +8,7 @@ public class EnemyVictoryState : IEnemyState
     {
         enemy.transform.localScale = new Vector3(1, 1, 1);
         enemy.Animator.SetTrigger(enemy.VictoryHash);
-        enemy.Rigidbody.velocity = Vector2.zero; 
+        enemy.Rigidbody2D.velocity = Vector2.zero; 
     }
 
     public void UpdateState(EnemyController enemy) { }

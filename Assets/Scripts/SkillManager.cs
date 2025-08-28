@@ -18,7 +18,9 @@ public class SkillManager : MonoBehaviour
     
      private List<TextMeshProUGUI> _cooldownTexts = new List<TextMeshProUGUI>();
      private List<BaseSkill> _playerSkills = new List<BaseSkill>(); 
-     private List<BaseSkill> _enemySkills = new List<BaseSkill>(); 
+     private List<BaseSkill> _enemySkills = new List<BaseSkill>();
+
+     public int EnemySkillCount => _enemySkills.Count;
 
     private void Awake()
     {
@@ -99,10 +101,10 @@ public class SkillManager : MonoBehaviour
 
     public BaseSkill GetEnemySkill(int skillNum)
     {
-        if (skillNum < 0 || skillNum >= _playerSkills.Count) 
+        if (skillNum < 0 || skillNum >= _enemySkills.Count) 
             return null;
 
-        var skill = _playerSkills[skillNum];
+        var skill = _enemySkills[skillNum];
         if (skill != null)
         {
             return skill;

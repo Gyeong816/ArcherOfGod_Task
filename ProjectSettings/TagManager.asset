@@ -12,8 +12,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Character
+  - Item
   - 
   - 
   - 
@@ -45,6 +45,12 @@ TagManager:
   - name: BackGround
     uniqueID: 392981551
     locked: 0
-  - name: Object
+  - name: WorldObject
     uniqueID: 3193629803
+    locked: 0
+  - name: Character
+    uniqueID: 1322705971
+    locked: 0
+  - name: Effect
+    uniqueID: 4082170733
     locked: 0

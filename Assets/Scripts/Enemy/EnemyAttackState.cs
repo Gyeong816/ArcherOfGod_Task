@@ -39,7 +39,7 @@ public class EnemyAttackState : IEnemyState
         _timer += Time.deltaTime;
         if (_timer >= _attackDuration)
         {
-            enemy.ChangeState(new EnemyPatrolState()); 
+            enemy.ChangeState(new EnemySkillState()); 
         }
     }
 

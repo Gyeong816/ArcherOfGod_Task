@@ -13,6 +13,8 @@ public class CombatObjectPool : MonoBehaviour
     }
     
     [SerializeField] private List<PoolItem> poolItems;
+    [SerializeField] private Canvas canvas;
+    
 
     private Dictionary<PoolType, Queue<GameObject>> _pools = new Dictionary<PoolType, Queue<GameObject>>();
 
@@ -32,34 +34,50 @@ public class CombatObjectPool : MonoBehaviour
             _pools[item.type] = queue;
         }
     }
-    
+
+    public Canvas GetCanvas()
+    {
+        return canvas;
+    }
     public GameObject Get(PoolType type)
+    {
+        return InternalGet(type, this.transform);
+    }
+    
+    public GameObject GetUI(PoolType type, Transform uiCanvas)
+    {
+        return InternalGet(type, uiCanvas);
+    }
+
+    private GameObject InternalGet(PoolType type, Transform parent)
     {
         if (!_pools.ContainsKey(type))
         {
-            Debug.LogError($" {type} 풀 없음");
+            Debug.LogError($"{type} 풀 없음");
             return null;
         }
 
         Queue<GameObject> pool = _pools[type];
+        GameObject obj;
 
         if (pool.Count > 0)
         {
-            GameObject obj = pool.Dequeue();
-            obj.SetActive(true);
-            return obj;
+            obj = pool.Dequeue();
         }
         else
         {
             PoolItem item = poolItems.Find(x => x.type == type);
-            if (item != null)
+            if (item == null)
             {
-                GameObject obj = Instantiate(item.prefab, this.transform);
-                obj.SetActive(true);
-                return obj;
+                Debug.LogError($"{type} 프리팹 없음");
+                return null;
             }
-            return null;
+            obj = Instantiate(item.prefab, parent);
         }
+
+        obj.SetActive(true);
+        obj.transform.SetParent(parent, false);
+        return obj;
     }
 
 

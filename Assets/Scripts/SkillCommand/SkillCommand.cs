@@ -52,7 +52,8 @@ public class SkillCommand : ICommand
         if (_isActive)
             return;
         
-        _skill.Activate(_player, _enemy, _pool, _characterType);
+        Transform target = GameManager.Instance.PlayerTarget;
+        _skill.Activate(_player, _enemy, _pool, _characterType,target);
         
         _isActive = true;
     }

@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
     [SerializeField] private float fireTime = 0.7f;
-    [SerializeField] private Transform enemyTargetTransform;
     
     public Transform  targetTransform;
     public Transform  ShootPoint => shootPoint;
@@ -121,14 +120,14 @@ public class PlayerController : MonoBehaviour
     }
     private void FireArrow()
     {
-        if (enemyTargetTransform == null) return;
-        
         GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
         arrowObj.transform.position = shootPoint.position;
         arrowObj.transform.rotation = Quaternion.identity;
+
+        Transform target = GameManager.Instance.PlayerTarget;
         
         Arrow arrow = arrowObj.GetComponent<Arrow>();
-        arrow.Initialize(enemyTargetTransform.position, combatObjectPool);
+        arrow.Initialize(target.position, combatObjectPool,OwnerType.Player);
     }
 
     public void Die()

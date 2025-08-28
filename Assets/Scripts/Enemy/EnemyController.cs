@@ -9,12 +9,14 @@ public class EnemyController : MonoBehaviour
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
-    [SerializeField] private Transform playerTargetTransform;
+    //[SerializeField] private Transform playerTargetTransform;
     
     public Transform targetTransform;
     public Transform ShootPoint => shootPoint;
     
     public SkillManager SkillManager => skillManager;
+    //public Transform PlayerTargetTransform => playerTargetTransform;
+    public CombatObjectPool CombatObjectPool => combatObjectPool;
     
     public float moveDurationMax = 4f;
     public float moveDurationMin = 1f;
@@ -22,17 +24,19 @@ public class EnemyController : MonoBehaviour
     public float attackDurationMin = 1f;
     public float fireTime = 0.7f;
     public float moveSpeed = 2f;
-    public Rigidbody2D Rigidbody { get; private set; }
+    
+    public Rigidbody2D Rigidbody2D { get; private set; }
     public Animator Animator { get; private set; }
     public int IsWalkingHash { get; private set; }
     public int IsDeadHash { get; private set; }
     public int VictoryHash { get; private set; }
 
     private IEnemyState _currentState;
+    private Collider2D _collider;
     
     private void Awake()
     {
-        Rigidbody = GetComponent<Rigidbody2D>();
+        Rigidbody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
         IsWalkingHash = Animator.StringToHash("IsWalking");
         IsDeadHash = Animator.StringToHash("IsDead");
@@ -41,7 +45,7 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        ChangeState(new EnemyPatrolState()); 
+        ChangeState(new EnemyAttackState()); 
     }
     private void Update()
     {
@@ -64,14 +68,15 @@ public class EnemyController : MonoBehaviour
 
     public void FireArrow()
     {
-        if (playerTargetTransform == null) return;
+        //if (playerTargetTransform == null) return;
         
         GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
         arrowObj.transform.position = shootPoint.position;
         arrowObj.transform.rotation = Quaternion.identity;
 
         Arrow arrow = arrowObj.GetComponent<Arrow>();
-        arrow.Initialize(playerTargetTransform.position, combatObjectPool);
+        Transform target = GameManager.Instance.EnemyTarget;
+        arrow.Initialize(target.position, combatObjectPool, OwnerType.Enemy);
     }
 
     public void Die()

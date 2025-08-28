@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class StraightArrowSkill : BaseSkill
 {
-    public override void Activate(PlayerController playerController, EnemyController enemyController, CombatObjectPool combatObjectPool, CharacterType characterType)
+    public override void Activate(PlayerController playerController, EnemyController enemyController, 
+        CombatObjectPool combatObjectPool, CharacterType characterType, Transform targetPoint)
     {
         
         if (characterType == CharacterType.Player)

@@ -7,21 +7,23 @@ public class JumpShotSkill : BaseSkill
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private int spinCount = 3;
     [SerializeField] private float spinDuration= 2;
-    public override void Activate(PlayerController playerController, EnemyController enemyController, CombatObjectPool combatObjectPool, CharacterType characterType)
+    public override void Activate(PlayerController playerController, EnemyController enemyController, CombatObjectPool combatObjectPool, CharacterType characterType,Transform targetPoint)
     {
         if (characterType == CharacterType.Player)
         {
             playerController.Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             
-            playerController.StartCoroutine(RotateAndShoot(playerController, enemyController, combatObjectPool)); 
+            playerController.StartCoroutine(PlayerRotateAndShoot(playerController, targetPoint, combatObjectPool)); 
         }
         else if (characterType == CharacterType.Enemy)
         {
-      
+            enemyController.Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            
+            enemyController.StartCoroutine(EnemyRotateAndShoot(enemyController, targetPoint, combatObjectPool)); 
         }
     }
     
-    private IEnumerator RotateAndShoot(PlayerController playerController, EnemyController enemy, CombatObjectPool combatObjectPool)
+    private IEnumerator PlayerRotateAndShoot(PlayerController playerController, Transform targetPoint, CombatObjectPool combatObjectPool)
     {
         float singleDuration = spinDuration / spinCount; 
 
@@ -31,11 +33,26 @@ public class JumpShotSkill : BaseSkill
             yield return RotateSpin(playerController.transform, 360f, singleDuration);
             GameObject straightArrow = combatObjectPool.Get(PoolType.JumpShotArrow);
             straightArrow.transform.position = playerController.ShootPoint.position;
-            straightArrow.transform.localScale = new Vector3(1, 1, 1);
             JumpShotArrow arrow = straightArrow.GetComponent<JumpShotArrow>();
-            arrow.Initialize(enemy.targetTransform.position, combatObjectPool);
+            arrow.Initialize(targetPoint.position, combatObjectPool);
         }
     }
+    
+    private IEnumerator EnemyRotateAndShoot(EnemyController enemyController, Transform targetPoint, CombatObjectPool combatObjectPool)
+    {
+        float singleDuration = spinDuration / spinCount; 
+
+        for (int i = 0; i < spinCount; i++)
+        {
+          
+            yield return RotateSpin(enemyController.transform, -360f, singleDuration);
+            GameObject straightArrow = combatObjectPool.Get(PoolType.JumpShotArrow);
+            straightArrow.transform.position = enemyController.ShootPoint.position;
+            JumpShotArrow arrow = straightArrow.GetComponent<JumpShotArrow>();
+            arrow.Initialize(targetPoint.position, combatObjectPool);
+        }
+    }
+    
 
     private IEnumerator RotateSpin(Transform target, float angle, float duration)
     {

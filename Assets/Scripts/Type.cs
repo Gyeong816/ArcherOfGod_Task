@@ -9,7 +9,8 @@ public enum PoolType
     Arrow,
     StraightArrow,
     JumpShotArrow,
-    Explosion
+    Shield,
+    ShieldHpBar
 }
 
 public enum SkillType
@@ -17,4 +18,10 @@ public enum SkillType
     StraightArrow,
     JumpShot,
     Fireball,
+}
+
+public enum OwnerType
+{
+    Player,
+    Enemy
 }

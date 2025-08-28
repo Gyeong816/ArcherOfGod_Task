@@ -20,8 +20,7 @@ public class JumpShotArrow : MonoBehaviour
         _pool = pool;
         _timer = 0f;
         _initialized = true;
-
-        // 시작 시 회전 방향 맞추기
+        
         Vector3 dir = (_target - transform.position).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);

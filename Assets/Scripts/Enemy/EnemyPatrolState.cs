@@ -6,8 +6,10 @@ public class EnemyPatrolState : IEnemyState, IEnemyPhysicsState
 {
     private float _moveDir = 1f;
     private float _timer = 0f;
-    private float _moveDuration = 2f;
+    private float _moveDuration;
     
+    private float _waitTimer = 0.5f; 
+    private bool _isWaiting = true;
 
     public void EnterState(EnemyController enemy)
     {
@@ -18,6 +20,15 @@ public class EnemyPatrolState : IEnemyState, IEnemyPhysicsState
 
     public void UpdateState(EnemyController enemy)
     {
+        if (_isWaiting)
+        {
+            _waitTimer -= Time.deltaTime;
+            if (_waitTimer <= 0f)
+            {
+                _isWaiting = false;
+            }
+            return; 
+        }
         
         _timer += Time.deltaTime;
         
@@ -35,12 +46,17 @@ public class EnemyPatrolState : IEnemyState, IEnemyPhysicsState
     
     public void FixedUpdateState(EnemyController enemy)
     {
-        enemy.Rigidbody.velocity = new Vector2(_moveDir * enemy.moveSpeed, enemy.Rigidbody.velocity.y);
+        if (_isWaiting)
+        {
+            return;
+        }
+        
+        enemy.Rigidbody2D.velocity = new Vector2(_moveDir * enemy.moveSpeed, enemy.Rigidbody2D.velocity.y);
     }
 
     public void ExitState(EnemyController enemy)
     {
-        enemy.Rigidbody.velocity = Vector2.zero;
+        enemy.Rigidbody2D.velocity = Vector2.zero;
         enemy.Animator.SetBool(enemy.IsWalkingHash, false);
     }
     

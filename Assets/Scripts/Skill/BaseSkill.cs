@@ -32,5 +32,6 @@ public abstract class BaseSkill : MonoBehaviour
          cooldownTimer = cooldown; 
     }
 
-    public abstract void Activate(PlayerController player, EnemyController enemy, CombatObjectPool pool, CharacterType characterType);
+    public abstract void Activate(PlayerController player, EnemyController enemy, 
+        CombatObjectPool pool, CharacterType characterType,Transform targetPoint);
 }

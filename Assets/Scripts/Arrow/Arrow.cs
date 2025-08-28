@@ -14,13 +14,14 @@ public class Arrow : MonoBehaviour
     private Vector3 _controlPoint;
     private float _time;
     private CombatObjectPool _pool;
+    private OwnerType _owner;
 
-    public void Initialize(Vector3 targetPos, CombatObjectPool pool)
+    public void Initialize(Vector3 targetPos, CombatObjectPool pool, OwnerType owner)
     {
         _start = transform.position;
         _target = targetPos;
         _pool = pool;
-        
+        _owner = owner;
         float distance = Vector3.Distance(_start, _target);
         float arcHeight = distance * arcScale;
 
@@ -61,6 +62,16 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.TryGetComponent(out Shield shield))
+        {
+            if (shield.Owner == _owner)
+                return;
+            
+            shield.TakeDamage(arrowDamage);
+            _pool.Return(PoolType.Arrow, gameObject);
+            return;
+        }
+        
         if (other.TryGetComponent(out Health health))
         {
             CombatSystem.Instance.DealDamage(other.gameObject, arrowDamage);
