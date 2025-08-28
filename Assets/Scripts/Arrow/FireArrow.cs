@@ -8,6 +8,8 @@ public class FireArrow : MonoBehaviour
     [SerializeField] private float arcScale = 0.3f;
     [SerializeField] private float arrowSpeed = 5f; 
     [SerializeField] private int damage = 20; 
+    [SerializeField] private float groundFireDuration = 5f;
+    [SerializeField] private GameObject groundFireEffect;
 
     private Vector3 _start;
     private Vector3 _target;
@@ -67,16 +69,28 @@ public class FireArrow : MonoBehaviour
         Vector3 q1 = Vector3.Lerp(_controlPoint, _target, t);
         return Vector3.Lerp(q0, q1, t);
     }
+    
+    private IEnumerator ReturnAfterFire(float delay)
+    {
+        groundFireEffect.SetActive(true);
+        yield return new WaitForSeconds(delay);
+        groundFireEffect.SetActive(false);
+        _pool.Return(PoolType.FireArrow, gameObject);
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            StartCoroutine(ReturnAfterFire(groundFireDuration));
+            return;
+        }
         if (other.TryGetComponent(out Shield shield))
         {
             if (shield.Owner == _owner)
                 return;
             
             shield.TakeDamage(damage);
-            _pool.Return(PoolType.FireArrow, gameObject);
             return;
         }
         
@@ -84,6 +98,8 @@ public class FireArrow : MonoBehaviour
         {
             CombatSystem.Instance.DealDamage(other.gameObject, damage);
             _pool.Return(PoolType.FireArrow, gameObject);
+            return;
         }
     }
+    
 }

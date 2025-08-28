@@ -8,7 +8,10 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float arcScale = 0.3f;
     [SerializeField] private float arrowSpeed = 5f; 
     [SerializeField] private int damage = 20; 
-
+    [SerializeField] private float flashDuration = 1f; 
+    [SerializeField] private GameObject flashEffect; 
+    [SerializeField] private SpriteRenderer arrowSprite; 
+    
     private Vector3 _start;
     private Vector3 _target;
     private Vector3 _controlPoint;
@@ -36,6 +39,7 @@ public class Arrow : MonoBehaviour
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
+        arrowSprite.enabled = true;
         gameObject.SetActive(true);
     }
 
@@ -57,7 +61,8 @@ public class Arrow : MonoBehaviour
         }
         else
         {
-            _pool.Return(PoolType.Arrow, gameObject);
+            flashEffect.SetActive(true);
+            StartCoroutine(ReturnAfterFlash(flashDuration));
         }
     }
 
@@ -68,22 +73,36 @@ public class Arrow : MonoBehaviour
         return Vector3.Lerp(q0, q1, t);
     }
 
+    private IEnumerator ReturnAfterFlash(float delay)
+    {
+        arrowSprite.enabled = false;
+        flashEffect.SetActive(true);
+        yield return new WaitForSeconds(delay);
+        flashEffect.SetActive(false);
+        _pool.Return(PoolType.Arrow, gameObject);
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            StartCoroutine(ReturnAfterFlash(flashDuration));
+            return;
+        }
+        
         if (other.TryGetComponent(out Shield shield))
         {
             if (shield.Owner == _owner)
                 return;
             
             shield.TakeDamage(damage);
-            _pool.Return(PoolType.Arrow, gameObject);
+            StartCoroutine(ReturnAfterFlash(flashDuration));
             return;
         }
         
         if (other.TryGetComponent(out Health health))
         {
             CombatSystem.Instance.DealDamage(other.gameObject, damage);
-            _pool.Return(PoolType.Arrow, gameObject);
+            StartCoroutine(ReturnAfterFlash(flashDuration));
         }
     }
 }
