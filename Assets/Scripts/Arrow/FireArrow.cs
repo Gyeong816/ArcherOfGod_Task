@@ -114,8 +114,8 @@ public class FireArrow : MonoBehaviour
         ps.Stop(true, ParticleSystemStopBehavior.StopEmitting); 
 
         yield return new WaitForSeconds(ps.main.startLifetime.constantMax); 
+        flashEffect.SetActive(false);
         groundFire.SetActive(false);
-
         _pool.Return(PoolType.FireArrow, gameObject);
     }
     private void OnTriggerEnter2D(Collider2D other)

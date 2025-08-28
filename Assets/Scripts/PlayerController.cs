@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float burnDuration = 5f; 
     [SerializeField] private GameObject burnEffect; 
     
+    [SerializeField] private float freezeDuration = 3f; 
+    [SerializeField] private float freezeSlowMultiplier = 0.5f; 
+    [SerializeField] private GameObject freezeEffect;
+    
     
     public Transform  targetTransform;
     public Transform  ShootPoint => shootPoint;
@@ -35,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private int _victory;
     private Queue<ICommand> skillQueue = new Queue<ICommand>();
     private bool isExecutingSkill = false;
+    private bool _isFrozen = false;
 
     private void Awake()
     {
@@ -134,16 +139,36 @@ public class PlayerController : MonoBehaviour
         Transform target = GameManager.Instance.PlayerTarget;
         arrow.Initialize(target.position, combatObjectPool, OwnerType.Player);
     }
+    
+    private void ApplyFreeze()
+    {
+        if (!_isFrozen)
+            StartCoroutine(FreezeCoroutine());
+    }
+
+    private IEnumerator FreezeCoroutine()
+    {
+        _isFrozen = true;
+        freezeEffect.SetActive(true);
+
+        float originalSpeed = moveSpeed;             
+        moveSpeed *= freezeSlowMultiplier;          
+
+        yield return new WaitForSeconds(freezeDuration);
+
+        moveSpeed = originalSpeed;               
+        freezeEffect.SetActive(false);
+        _isFrozen = false;
+    }
 
     private void ApplyBurn()
     {
         if (!_isBurning)  
-        {
-            StartCoroutine(BurnRoutine());
-        }
+            StartCoroutine(BurnCoroutine());
+        
     }
 
-    private IEnumerator BurnRoutine()
+    private IEnumerator BurnCoroutine()
     {
         _isBurning = true;
         burnEffect.SetActive(true);
@@ -162,6 +187,7 @@ public class PlayerController : MonoBehaviour
     public void Die()
     {
         burnEffect.SetActive(false);
+        freezeEffect.SetActive(false);
         _animator.SetTrigger(_isDeadHash);
     }
 
@@ -174,8 +200,12 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("GroundFire"))
         {
-            Debug.Log("Ground Fire");
             ApplyBurn();
+        }
+        if (other.CompareTag("GroundIce"))
+        {
+            Debug.Log("GroundIce");
+            ApplyFreeze();
         }
     }
 }
