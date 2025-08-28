@@ -10,18 +10,28 @@ public class SkillManager : MonoBehaviour
 {
    
     [SerializeField] private List<Button> skillButtons;
-    [SerializeField] private List<TextMeshProUGUI> cooldownTexts;
     [SerializeField] private List<BaseSkill> skills;
 
     [SerializeField] private PlayerController playerController;
     [SerializeField] private EnemyController enemyController;
     [SerializeField] private CombatObjectPool combatObjectPool;
     
+     private List<TextMeshProUGUI> _cooldownTexts = new List<TextMeshProUGUI>();
      private List<BaseSkill> _playerSkills = new List<BaseSkill>(); 
      private List<BaseSkill> _enemySkills = new List<BaseSkill>(); 
 
     private void Awake()
     {
+        _cooldownTexts.Clear();
+        foreach (var button in skillButtons)
+        {
+            TextMeshProUGUI text = button.GetComponentInChildren<TextMeshProUGUI>();
+            if (text != null)
+            {
+                _cooldownTexts.Add(text);
+            }
+        }
+        
         for (int i = 0; i < skills.Count; i++)
         {
             _playerSkills.Add(skills[i]);
@@ -53,12 +63,12 @@ public class SkillManager : MonoBehaviour
 
             if (remaining > 0f)
             {
-                cooldownTexts[i].text = Mathf.CeilToInt(remaining).ToString();
+                _cooldownTexts[i].text = Mathf.CeilToInt(remaining).ToString();
                 skillButtons[i].interactable = false;
             }
             else
             {
-                cooldownTexts[i].text = "";
+                _cooldownTexts[i].text = "";
                 skillButtons[i].interactable = true;
             }
         }
@@ -87,15 +97,17 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    private void UseEnemySkill(int skillNum)
+    public BaseSkill GetEnemySkill(int skillNum)
     {
-        if (skillNum < 0 || skillNum >= _playerSkills.Count) return;
+        if (skillNum < 0 || skillNum >= _playerSkills.Count) 
+            return null;
 
         var skill = _playerSkills[skillNum];
         if (skill != null)
         {
-            skill.Activate(playerController, enemyController, combatObjectPool, CharacterType.Enemy);
-            skill.SetTimer();
+            return skill;
         }
+        return null;
     }
+    
 }

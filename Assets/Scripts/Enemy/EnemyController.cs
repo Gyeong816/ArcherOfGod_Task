@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    
+    [SerializeField] private SkillManager skillManager;
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
@@ -11,6 +13,8 @@ public class EnemyController : MonoBehaviour
     
     public Transform targetTransform;
     public Transform ShootPoint => shootPoint;
+    
+    public SkillManager SkillManager => skillManager;
     
     public float moveDurationMax = 4f;
     public float moveDurationMin = 1f;

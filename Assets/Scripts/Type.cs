@@ -8,7 +8,7 @@ public enum PoolType
 {
     Arrow,
     StraightArrow,
-    FlyArrow,
+    JumpShotArrow,
     Explosion
 }
 

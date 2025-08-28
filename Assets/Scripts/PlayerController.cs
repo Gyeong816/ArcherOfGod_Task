@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public Transform  targetTransform;
     public Transform  ShootPoint => shootPoint;
     public Animator Animator => _animator;
+    public Rigidbody2D Rigidbody2D => _rigidbody2D;
+    
     
     private bool _hasFired = false;
     private Rigidbody2D _rigidbody2D;

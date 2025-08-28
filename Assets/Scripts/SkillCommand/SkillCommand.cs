@@ -5,17 +5,17 @@ using UnityEngine;
 public class SkillCommand : ICommand
 {
     private BaseSkill _skill;
-    private CharacterType _caster;
+    private CharacterType _characterType;
     private PlayerController _player;
     private EnemyController _enemy;
     private CombatObjectPool _pool;
     private string _animHash;
     private bool _isActive;
 
-    public SkillCommand(BaseSkill skill, CharacterType caster, PlayerController player, EnemyController enemy, CombatObjectPool pool, string animHash)
+    public SkillCommand(BaseSkill skill, CharacterType characterType, PlayerController player, EnemyController enemy, CombatObjectPool pool, string animHash)
     {
         _skill = skill;
-        _caster = caster;
+        _characterType = characterType;
         _player = player;
         _enemy = enemy;
         _pool = pool;
@@ -52,7 +52,7 @@ public class SkillCommand : ICommand
         if (_isActive)
             return;
         
-        _skill.Activate(_player, _enemy, _pool, _caster);
+        _skill.Activate(_player, _enemy, _pool, _characterType);
         
         _isActive = true;
     }
