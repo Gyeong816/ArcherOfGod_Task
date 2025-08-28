@@ -49,7 +49,7 @@ public class JumpShotArrow : MonoBehaviour
                 return;
             
             shield.TakeDamage(damage);
-            _pool.Return(PoolType.Arrow, gameObject);
+            _pool.Return(PoolType.JumpShotArrow, gameObject);
             return;
         }
         

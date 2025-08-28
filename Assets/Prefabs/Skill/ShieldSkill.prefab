@@ -44,8 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88f085d7bcbc3ce478295942036b0337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillType: 0
   cooldown: 3
   spawnTime: 0.5
-  animName: 
+  animName: ShieldSkill
   spawnHeight: 10

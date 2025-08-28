@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireArrow : MonoBehaviour
+public class IceArrow : MonoBehaviour
 {
     [SerializeField] private float duration = 1f;   
     [SerializeField] private float arcScale = 0.3f;
@@ -57,7 +57,7 @@ public class FireArrow : MonoBehaviour
         }
         else
         {
-            _pool.Return(PoolType.FireArrow, gameObject);
+            _pool.Return(PoolType.IceArrow, gameObject);
         }
     }
 
@@ -76,14 +76,14 @@ public class FireArrow : MonoBehaviour
                 return;
             
             shield.TakeDamage(damage);
-            _pool.Return(PoolType.FireArrow, gameObject);
+            _pool.Return(PoolType.IceArrow, gameObject);
             return;
         }
         
         if (other.TryGetComponent(out Health health))
         {
             CombatSystem.Instance.DealDamage(other.gameObject, damage);
-            _pool.Return(PoolType.FireArrow, gameObject);
+            _pool.Return(PoolType.IceArrow, gameObject);
         }
     }
 }

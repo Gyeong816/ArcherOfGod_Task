@@ -4952,6 +4952,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e79f746658903c459973c351ae2cdcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  duration: 1.5
+  arcScale: 0.6
+  arrowSpeed: 8
+  damage: 20
 --- !u!1 &6976495533431408777
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,7 +40,7 @@ public class StraightArrow : MonoBehaviour
                 return;
             
             shield.TakeDamage(damage);
-            _pool.Return(PoolType.Arrow, gameObject);
+            _pool.Return(PoolType.StraightArrow, gameObject);
             return;
         }
         

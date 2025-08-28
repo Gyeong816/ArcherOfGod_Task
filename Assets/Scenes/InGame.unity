@@ -1465,11 +1465,13 @@ MonoBehaviour:
   - {fileID: 1444473677}
   - {fileID: 913382714}
   - {fileID: 442430130}
+  - {fileID: 1158293355}
   skills:
   - {fileID: 8328276862192884294, guid: 9e7523d6598e9244e893401a3c0f0662, type: 3}
   - {fileID: 5690364838075540758, guid: ca074a6373c4082428dd75d33d7c11ee, type: 3}
   - {fileID: 3799214111976017914, guid: d702cd1fba2db60429d032a0baa72d30, type: 3}
   - {fileID: 456087735878756187, guid: d15f45d0cc6da3d4dbcfdc7b84349900, type: 3}
+  - {fileID: 4999862269951540780, guid: c07f396c34243544b8b5faaf7be15977, type: 3}
   playerController: {fileID: 95000012644383836}
   enemyController: {fileID: 1511358640}
   combatObjectPool: {fileID: 1731229807}
@@ -2639,7 +2641,7 @@ GameObject:
   - component: {fileID: 1158293356}
   - component: {fileID: 1158293355}
   m_Layer: 5
-  m_Name: Skill (4)
+  m_Name: SkillButton(4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3315,7 +3317,7 @@ Animator:
   m_GameObject: {fileID: 1511358635}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3132e9f207cfc484291e137bbfb3b5f7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 64f1a3e5d3dd4524b93b850d28624294, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3794,6 +3796,9 @@ MonoBehaviour:
     size: 3
   - type: 5
     prefab: {fileID: 5734511568900838070, guid: 663d375a485c58e46b9d9503d10d6285, type: 3}
+    size: 3
+  - type: 6
+    prefab: {fileID: 5734511568900838070, guid: e8d59299e52e3ff479553886b2604651, type: 3}
     size: 3
   canvas: {fileID: 699992876}
 --- !u!1 &1755820543
