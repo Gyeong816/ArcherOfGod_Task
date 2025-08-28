@@ -10,6 +10,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform enemyTransform;
+    [SerializeField] private UiManager uiManager;
+    
+    [SerializeField] private float shakeDuration = 0.2f;
+    [SerializeField] private float shakeMagnitude = 0.2f;
+    
+    [Header("라운드 시간 설정")]
+    [SerializeField] private float roundTime = 90f;   
+    private float _remainingTime;
+    private bool _isRunning = false; 
+    private Camera mainCamera;
     public static GameManager Instance { get; private set; }
 
     private List<Shield> _playerShields = new List<Shield>();
@@ -26,9 +36,38 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-
+        
+        mainCamera = Camera.main;
         PlayerTarget = enemyTransform;
         EnemyTarget = playerTransform;
+        
+    }
+    
+    private void Update()
+    {
+        if (_isRunning && _remainingTime > 0f)
+        {
+            _remainingTime -= Time.deltaTime;
+            
+            uiManager.UpdateTimerUI(_remainingTime);
+
+            if (_remainingTime <= 0f)
+            {
+                _isRunning = false;
+                EndRound();
+            }
+        }
+    }
+    
+    public void StartTimer()
+    {
+        _remainingTime = roundTime;
+        _isRunning = true;
+    }
+
+    private void EndRound()
+    {
+        Debug.Log("라운드 종료!");
     }
     
     public void RegisterShield(Shield shield)
@@ -67,6 +106,29 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    public void OnShieldHitGround()
+    {
+        StartCoroutine(CameraShake(shakeDuration, shakeMagnitude));
+    }
+
+    private IEnumerator CameraShake(float duration, float magnitude)
+    {
+        Vector3 originalPos = mainCamera.transform.localPosition;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float x = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+            float y = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+
+            mainCamera.transform.localPosition = originalPos + new Vector3(x, y, 0f);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        mainCamera.transform.localPosition = originalPos;
+    }
     public void OnPlayerDead()
     {
         Debug.Log("패배!");

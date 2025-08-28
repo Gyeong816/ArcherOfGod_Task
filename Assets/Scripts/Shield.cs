@@ -77,4 +77,15 @@ public class Shield : MonoBehaviour
         
         _pool.Return(PoolType.Shield, gameObject);
     }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.OnShieldHitGround();
+            }
+        }
+    }
 }
