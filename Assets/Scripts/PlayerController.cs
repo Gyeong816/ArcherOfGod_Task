@@ -122,12 +122,10 @@ public class PlayerController : MonoBehaviour
     {
         GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
         arrowObj.transform.position = shootPoint.position;
-        arrowObj.transform.rotation = Quaternion.identity;
 
-        Transform target = GameManager.Instance.PlayerTarget;
-        
         Arrow arrow = arrowObj.GetComponent<Arrow>();
-        arrow.Initialize(target.position, combatObjectPool,OwnerType.Player);
+        Transform target = GameManager.Instance.PlayerTarget;
+        arrow.Initialize(target.position, combatObjectPool, OwnerType.Player);
     }
 
     public void Die()

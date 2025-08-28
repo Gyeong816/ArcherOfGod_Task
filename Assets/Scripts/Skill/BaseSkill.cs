@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class BaseSkill : MonoBehaviour
 {
-    public SkillType skillType;
     public float cooldown = 3f;
     public float spawnTime = 0.5f;
     private float cooldownTimer = 0f;

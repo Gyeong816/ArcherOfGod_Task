@@ -14,7 +14,7 @@ public class StraightArrowSkill : BaseSkill
             straightArrow.transform.position = playerController.ShootPoint.position;
             straightArrow.transform.localScale = new Vector3(1, 1, 1);
             StraightArrow arrow = straightArrow.GetComponent<StraightArrow>();
-            arrow.Initialize(combatObjectPool, Vector3.right);
+            arrow.Initialize(combatObjectPool, Vector3.right, OwnerType.Player);
         }
         else if (characterType == CharacterType.Enemy)
         {
@@ -22,7 +22,7 @@ public class StraightArrowSkill : BaseSkill
             straightArrow.transform.position = enemyController.ShootPoint.position;
             straightArrow.transform.localScale = new Vector3(-1, 1, 1);
             StraightArrow arrow = straightArrow.GetComponent<StraightArrow>();
-            arrow.Initialize(combatObjectPool, Vector3.left);
+            arrow.Initialize(combatObjectPool, Vector3.left, OwnerType.Enemy);
         }
     }
 }

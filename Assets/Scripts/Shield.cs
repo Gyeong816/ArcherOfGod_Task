@@ -28,12 +28,17 @@ public class Shield : MonoBehaviour
         _isDead = false;
         _pool = pool;
         
+        
         GameManager.Instance.RegisterShield(this);
         
         GameObject sliderObj = pool.GetUI(PoolType.ShieldHpBar, uiCanvas);
+        sliderObj.SetActive(true);
+        
         _hpSlider = sliderObj.GetComponent<Slider>();
         _hpSlider.maxValue = maxHp;
         _hpSlider.value = maxHp;
+        
+        gameObject.SetActive(true);
     }
 
     private void Update()

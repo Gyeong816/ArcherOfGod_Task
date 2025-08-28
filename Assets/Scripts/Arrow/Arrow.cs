@@ -7,7 +7,7 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float duration = 1f;   
     [SerializeField] private float arcScale = 0.3f;
     [SerializeField] private float arrowSpeed = 5f; 
-    [SerializeField] private int arrowDamage = 20; 
+    [SerializeField] private int damage = 20; 
 
     private Vector3 _start;
     private Vector3 _target;
@@ -29,6 +29,14 @@ public class Arrow : MonoBehaviour
         _time = 0f;
         
         duration = distance / arrowSpeed;
+        
+        Vector3 dir = (_target - _start).normalized;
+        if (dir != Vector3.zero)
+        {
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+        gameObject.SetActive(true);
     }
 
     private void Update()
@@ -67,14 +75,14 @@ public class Arrow : MonoBehaviour
             if (shield.Owner == _owner)
                 return;
             
-            shield.TakeDamage(arrowDamage);
+            shield.TakeDamage(damage);
             _pool.Return(PoolType.Arrow, gameObject);
             return;
         }
         
         if (other.TryGetComponent(out Health health))
         {
-            CombatSystem.Instance.DealDamage(other.gameObject, arrowDamage);
+            CombatSystem.Instance.DealDamage(other.gameObject, damage);
             _pool.Return(PoolType.Arrow, gameObject);
         }
     }

@@ -11,24 +11,24 @@ public class JumpShotArrow : MonoBehaviour
     private Vector3 _target;
     private CombatObjectPool _pool;
     private float _timer;
+    
+    private OwnerType _owner;
 
-    private bool _initialized;
-
-    public void Initialize(Vector3 targetPos, CombatObjectPool pool)
+    public void Initialize(Vector3 targetPos, CombatObjectPool pool, OwnerType ownerType)
     {
         _target = targetPos;
         _pool = pool;
         _timer = 0f;
-        _initialized = true;
+        _owner = ownerType;
         
         Vector3 dir = (_target - transform.position).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        gameObject.SetActive(true);
     }
 
     private void Update()
     {
-        if (!_initialized) return;
         
         Vector3 dir = (_target - transform.position).normalized;
         transform.position += dir * speed * Time.deltaTime;
@@ -43,6 +43,16 @@ public class JumpShotArrow : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.TryGetComponent(out Shield shield))
+        {
+            if (shield.Owner == _owner)
+                return;
+            
+            shield.TakeDamage(damage);
+            _pool.Return(PoolType.Arrow, gameObject);
+            return;
+        }
+        
         if (other.TryGetComponent(out Health health))
         {
             CombatSystem.Instance.DealDamage(other.gameObject, damage);

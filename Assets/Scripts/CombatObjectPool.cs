@@ -74,8 +74,7 @@ public class CombatObjectPool : MonoBehaviour
             }
             obj = Instantiate(item.prefab, parent);
         }
-
-        obj.SetActive(true);
+        
         obj.transform.SetParent(parent, false);
         return obj;
     }

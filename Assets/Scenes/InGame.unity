@@ -878,7 +878,7 @@ GameObject:
   - component: {fileID: 442430131}
   - component: {fileID: 442430130}
   m_Layer: 5
-  m_Name: Skill (3)
+  m_Name: SkillButton(3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1464,10 +1464,12 @@ MonoBehaviour:
   - {fileID: 385491252}
   - {fileID: 1444473677}
   - {fileID: 913382714}
+  - {fileID: 442430130}
   skills:
   - {fileID: 8328276862192884294, guid: 9e7523d6598e9244e893401a3c0f0662, type: 3}
   - {fileID: 5690364838075540758, guid: ca074a6373c4082428dd75d33d7c11ee, type: 3}
   - {fileID: 3799214111976017914, guid: d702cd1fba2db60429d032a0baa72d30, type: 3}
+  - {fileID: 456087735878756187, guid: d15f45d0cc6da3d4dbcfdc7b84349900, type: 3}
   playerController: {fileID: 95000012644383836}
   enemyController: {fileID: 1511358640}
   combatObjectPool: {fileID: 1731229807}
@@ -3356,7 +3358,6 @@ MonoBehaviour:
   skillManager: {fileID: 634465285}
   combatObjectPool: {fileID: 1731229807}
   shootPoint: {fileID: 853627004}
-  playerTargetTransform: {fileID: 1199890516}
   targetTransform: {fileID: 120263401}
   moveDurationMax: 4
   moveDurationMin: 1
@@ -3631,7 +3632,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.21637471, g: 0.17933428, b: 0.24528301, a: 1}
+  m_Color: {r: 0.24230152, g: 0.28597364, b: 0.4245283, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3778,7 +3779,7 @@ MonoBehaviour:
   poolItems:
   - type: 0
     prefab: {fileID: 5734511568900838070, guid: dfd17ba2b76ea2a45932499aad0d7e43, type: 3}
-    size: 5
+    size: 10
   - type: 1
     prefab: {fileID: 5734511568900838070, guid: 8249699b54ab50c44b90561ed7d66aba, type: 3}
     size: 2
@@ -3790,6 +3791,9 @@ MonoBehaviour:
     size: 3
   - type: 4
     prefab: {fileID: 3123798585289722135, guid: 8e8f5d38a029edd47a78e53caa06a722, type: 3}
+    size: 3
+  - type: 5
+    prefab: {fileID: 5734511568900838070, guid: 663d375a485c58e46b9d9503d10d6285, type: 3}
     size: 3
   canvas: {fileID: 699992876}
 --- !u!1 &1755820543
@@ -4684,7 +4688,6 @@ MonoBehaviour:
   combatObjectPool: {fileID: 1731229807}
   shootPoint: {fileID: 1156353821}
   fireTime: 0.6
-  enemyTargetTransform: {fileID: 120263401}
   targetTransform: {fileID: 1199890516}
 --- !u!114 &95000012644383837
 MonoBehaviour:

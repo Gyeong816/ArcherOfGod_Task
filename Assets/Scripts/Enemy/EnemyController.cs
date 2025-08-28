@@ -68,14 +68,12 @@ public class EnemyController : MonoBehaviour
 
     public void FireArrow()
     {
-        //if (playerTargetTransform == null) return;
-        
         GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
         arrowObj.transform.position = shootPoint.position;
-        arrowObj.transform.rotation = Quaternion.identity;
 
         Arrow arrow = arrowObj.GetComponent<Arrow>();
         Transform target = GameManager.Instance.EnemyTarget;
+        
         arrow.Initialize(target.position, combatObjectPool, OwnerType.Enemy);
     }
 

@@ -10,7 +10,8 @@ public enum PoolType
     StraightArrow,
     JumpShotArrow,
     Shield,
-    ShieldHpBar
+    ShieldHpBar,
+    FireArrow
 }
 
 public enum SkillType

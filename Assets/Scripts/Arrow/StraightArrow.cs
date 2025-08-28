@@ -11,13 +11,14 @@ public class StraightArrow : MonoBehaviour
     private Vector3 _direction;
     private CombatObjectPool _pool;
     private float _timer;
-    
-    public void Initialize(CombatObjectPool pool, Vector3 direction)
+    private OwnerType _owner;
+    public void Initialize(CombatObjectPool pool, Vector3 direction, OwnerType ownerType)
     {
         _pool = pool;
         _direction = direction;
-        
+        _owner = ownerType;
         _timer = 0f;
+        gameObject.SetActive(true);
     }
 
     private void Update()
@@ -30,9 +31,19 @@ public class StraightArrow : MonoBehaviour
             _pool.Return(PoolType.StraightArrow, gameObject);
         }
     }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.TryGetComponent(out Shield shield))
+        {
+            if (shield.Owner == _owner)
+                return;
+            
+            shield.TakeDamage(damage);
+            _pool.Return(PoolType.Arrow, gameObject);
+            return;
+        }
+        
         if (other.TryGetComponent(out Health health))
         {
             CombatSystem.Instance.DealDamage(other.gameObject, damage);

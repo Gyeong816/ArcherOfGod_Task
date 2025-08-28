@@ -34,7 +34,7 @@ public class JumpShotSkill : BaseSkill
             GameObject straightArrow = combatObjectPool.Get(PoolType.JumpShotArrow);
             straightArrow.transform.position = playerController.ShootPoint.position;
             JumpShotArrow arrow = straightArrow.GetComponent<JumpShotArrow>();
-            arrow.Initialize(targetPoint.position, combatObjectPool);
+            arrow.Initialize(targetPoint.position, combatObjectPool, OwnerType.Player);
         }
     }
     
@@ -49,7 +49,7 @@ public class JumpShotSkill : BaseSkill
             GameObject straightArrow = combatObjectPool.Get(PoolType.JumpShotArrow);
             straightArrow.transform.position = enemyController.ShootPoint.position;
             JumpShotArrow arrow = straightArrow.GetComponent<JumpShotArrow>();
-            arrow.Initialize(targetPoint.position, combatObjectPool);
+            arrow.Initialize(targetPoint.position, combatObjectPool, OwnerType.Enemy);
         }
     }
     
