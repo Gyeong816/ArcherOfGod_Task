@@ -9,13 +9,10 @@ public class EnemyController : MonoBehaviour
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
-    //[SerializeField] private Transform playerTargetTransform;
-    
-    public Transform targetTransform;
     public Transform ShootPoint => shootPoint;
     
     public SkillManager SkillManager => skillManager;
-    //public Transform PlayerTargetTransform => playerTargetTransform;
+
     public CombatObjectPool CombatObjectPool => combatObjectPool;
     
     public float moveDurationMax = 4f;
@@ -24,6 +21,8 @@ public class EnemyController : MonoBehaviour
     public float attackDurationMin = 1f;
     public float fireTime = 0.7f;
     public float moveSpeed = 2f;
+
+    public int testSkillnum;
     
     public Rigidbody2D Rigidbody2D { get; private set; }
     public Animator Animator { get; private set; }

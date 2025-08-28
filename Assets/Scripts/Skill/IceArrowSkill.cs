@@ -18,8 +18,7 @@ public class IceArrowSkill : BaseSkill
             GameObject arrowObj = pool.Get(PoolType.IceArrow);
             arrowObj.transform.position = enemy.ShootPoint.position;
             IceArrow iceArrow = arrowObj.GetComponent<IceArrow>();
-            Transform target = GameManager.Instance.PlayerTarget;
-            iceArrow.Initialize(target.position, pool, OwnerType.Enemy);
+            iceArrow.Initialize(targetPoint.position, pool, OwnerType.Enemy);
         }
     }
 }

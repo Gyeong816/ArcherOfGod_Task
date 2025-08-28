@@ -13,12 +13,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform shootPoint;   
     [SerializeField] private float fireTime = 0.7f;
     
+    
+    [SerializeField] private int burnDamage = 5;    
+    [SerializeField] private float burnInterval = 1f; 
+    [SerializeField] private float burnDuration = 5f; 
+    [SerializeField] private GameObject burnEffect; 
+    
+    
     public Transform  targetTransform;
     public Transform  ShootPoint => shootPoint;
     public Animator Animator => _animator;
     public Rigidbody2D Rigidbody2D => _rigidbody2D;
     
-    
+    private bool _isBurning = false;
     private bool _hasFired = false;
     private Rigidbody2D _rigidbody2D;
     private float _moveInput;
@@ -128,13 +135,47 @@ public class PlayerController : MonoBehaviour
         arrow.Initialize(target.position, combatObjectPool, OwnerType.Player);
     }
 
+    private void ApplyBurn()
+    {
+        if (!_isBurning)  
+        {
+            StartCoroutine(BurnRoutine());
+        }
+    }
+
+    private IEnumerator BurnRoutine()
+    {
+        _isBurning = true;
+        burnEffect.SetActive(true);
+        float elapsed = 0f;
+
+        while (elapsed < burnDuration)
+        {
+            CombatSystem.Instance.DealDamage(gameObject, burnDamage);
+
+            yield return new WaitForSeconds(burnInterval);
+            elapsed += burnInterval;
+        }
+        burnEffect.SetActive(false);
+        _isBurning = false;
+    }
     public void Die()
     {
+        burnEffect.SetActive(false);
         _animator.SetTrigger(_isDeadHash);
     }
 
     public void OnVictory()
     {
         _animator.SetTrigger(_victory);
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("GroundFire"))
+        {
+            Debug.Log("Ground Fire");
+            ApplyBurn();
+        }
     }
 }

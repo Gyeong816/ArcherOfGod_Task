@@ -9,7 +9,11 @@ public class FireArrow : MonoBehaviour
     [SerializeField] private float arrowSpeed = 5f; 
     [SerializeField] private int damage = 20; 
     [SerializeField] private float groundFireDuration = 5f;
-    [SerializeField] private GameObject groundFireEffect;
+    [SerializeField] private GameObject groundFire;
+    [SerializeField] private GameObject arrowBody;
+    [SerializeField] private GameObject flashEffect;
+    [SerializeField] private float flashDuration = 0.5f; 
+    
 
     private Vector3 _start;
     private Vector3 _target;
@@ -17,6 +21,9 @@ public class FireArrow : MonoBehaviour
     private float _time;
     private CombatObjectPool _pool;
     private OwnerType _owner;
+    private bool _hasReachedTarget;
+    private Vector3 _lastDirection;
+    private bool _isStopped;
 
     public void Initialize(Vector3 targetPos, CombatObjectPool pool, OwnerType owner)
     {
@@ -24,9 +31,12 @@ public class FireArrow : MonoBehaviour
         _target = targetPos;
         _pool = pool;
         _owner = owner;
+        _isStopped = false;
         float distance = Vector3.Distance(_start, _target);
         float arcHeight = distance * arcScale;
 
+        arrowBody.SetActive(true);
+        _hasReachedTarget = false;
         _controlPoint = (_start + _target) / 2f + Vector3.up * arcHeight;
         _time = 0f;
         
@@ -43,23 +53,33 @@ public class FireArrow : MonoBehaviour
 
     private void Update()
     {
-        if (_time < 1f)
+        if (_isStopped) return; 
+        
+        if (!_hasReachedTarget)
         {
-            _time += Time.deltaTime / duration;
-            Vector3 newPos = CalculateBezierPoint(_time);
-            
-            Vector3 direction = (newPos - transform.position).normalized;
-            if (direction != Vector3.zero)
+            if (_time < 1f)
             {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            }
+                _time += Time.deltaTime / duration;
+                Vector3 newPos = CalculateBezierPoint(_time);
 
-            transform.position = newPos;
+                Vector3 direction = (newPos - transform.position).normalized;
+                if (direction != Vector3.zero)
+                {
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                }
+
+                transform.position = newPos;
+                _lastDirection = direction; 
+            }
+            else
+            {
+                _hasReachedTarget = true;
+            }
         }
         else
         {
-            _pool.Return(PoolType.FireArrow, gameObject);
+            transform.position += _lastDirection * arrowSpeed * Time.deltaTime;
         }
     }
 
@@ -70,35 +90,57 @@ public class FireArrow : MonoBehaviour
         return Vector3.Lerp(q0, q1, t);
     }
     
-    private IEnumerator ReturnAfterFire(float delay)
+    private IEnumerator OnFlash(float delay)
     {
-        groundFireEffect.SetActive(true);
+        _isStopped = true;
+        arrowBody.SetActive(false);
+        flashEffect.SetActive(true);
         yield return new WaitForSeconds(delay);
-        groundFireEffect.SetActive(false);
+        flashEffect.SetActive(false);
         _pool.Return(PoolType.FireArrow, gameObject);
     }
 
+    private IEnumerator GroundFireAndRetrun(float fireDuration)
+    {
+        _isStopped = true;
+        arrowBody.SetActive(false);
+        groundFire.SetActive(true);
+
+        ParticleSystem ps = groundFire.GetComponent<ParticleSystem>();
+        ps.Play();
+
+        yield return new WaitForSeconds(fireDuration);
+
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmitting); 
+
+        yield return new WaitForSeconds(ps.main.startLifetime.constantMax); 
+        groundFire.SetActive(false);
+
+        _pool.Return(PoolType.FireArrow, gameObject);
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            StartCoroutine(ReturnAfterFire(groundFireDuration));
+            flashEffect.SetActive(true);
+            StartCoroutine(GroundFireAndRetrun(groundFireDuration));
             return;
         }
+        
         if (other.TryGetComponent(out Shield shield))
         {
             if (shield.Owner == _owner)
                 return;
             
             shield.TakeDamage(damage);
+            
+            StartCoroutine(OnFlash(flashDuration));
             return;
         }
         
         if (other.TryGetComponent(out Health health))
         {
             CombatSystem.Instance.DealDamage(other.gameObject, damage);
-            _pool.Return(PoolType.FireArrow, gameObject);
-            return;
         }
     }
     

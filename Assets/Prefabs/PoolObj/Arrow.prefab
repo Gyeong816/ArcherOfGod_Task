@@ -4694,8 +4694,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -212796563
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 1
   m_MeshDistribution: 0
@@ -4797,7 +4797,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.66, y: 0}
+  m_Offset: {x: 0.31, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
 --- !u!50 &6878415163059614724
@@ -4842,8 +4842,9 @@ MonoBehaviour:
   duration: 1.5
   arcScale: 0.6
   arrowSpeed: 8
-  damage: 20
-  flashDuration: 1
+  damage: 5
+  flashDuration: 0.5
+  fadeDuration: 1
   flashEffect: {fileID: 6693262758488171164}
   arrowSprite: {fileID: 2883815394133197805}
 --- !u!1 &6410990513682270232
@@ -9711,8 +9712,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -212796563
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 4
   m_MeshDistribution: 0
@@ -9775,7 +9776,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.566, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4709703955393843837}
@@ -14444,8 +14445,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -212796563
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 1
   m_MeshDistribution: 0
@@ -14661,6 +14662,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1021555213599026026}
   - component: {fileID: 4307591622259274496}
+  - component: {fileID: 1721883233471567400}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -14745,6 +14747,29 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1721883233471567400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6751428057408546613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &7632208402452796659
 GameObject:
   m_ObjectHideFlags: 0

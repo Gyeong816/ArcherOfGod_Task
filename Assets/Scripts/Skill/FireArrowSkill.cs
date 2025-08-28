@@ -20,8 +20,7 @@ public class FireArrowSkill : BaseSkill
             GameObject arrowObj = pool.Get(PoolType.FireArrow);
             arrowObj.transform.position = enemy.ShootPoint.position;
             FireArrow fireArrow = arrowObj.GetComponent<FireArrow>();
-            Transform target = GameManager.Instance.PlayerTarget;
-            fireArrow.Initialize(target.position, pool, OwnerType.Enemy);
+            fireArrow.Initialize(targetPoint.position, pool, OwnerType.Enemy);
         }
     }
 }

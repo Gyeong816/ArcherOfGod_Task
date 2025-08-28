@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private EnemyController enemyController;
 
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Transform enemyTransform;
     public static GameManager Instance { get; private set; }
 
     private List<Shield> _playerShields = new List<Shield>();
@@ -24,9 +26,9 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        
-        PlayerTarget = enemyController.transform;
-        EnemyTarget = playerController.transform;
+
+        PlayerTarget = enemyTransform;
+        EnemyTarget = playerTransform;
     }
     
     public void RegisterShield(Shield shield)
@@ -52,7 +54,7 @@ public class GameManager : MonoBehaviour
             if (_playerShields.Count > 0)
                 EnemyTarget = _playerShields[0].transform;
             else
-                EnemyTarget = playerController.transform; 
+                EnemyTarget = playerTransform;
         }
         else
         {
@@ -61,7 +63,7 @@ public class GameManager : MonoBehaviour
             if (_enemyShields.Count > 0)
                 PlayerTarget = _enemyShields[0].transform;
             else
-                PlayerTarget = enemyController.transform;
+                PlayerTarget = enemyTransform;
         }
     }
     

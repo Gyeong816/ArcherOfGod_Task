@@ -9,6 +9,7 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float arrowSpeed = 5f; 
     [SerializeField] private int damage = 20; 
     [SerializeField] private float flashDuration = 1f; 
+    [SerializeField] private float fadeDuration = 1f; 
     [SerializeField] private GameObject flashEffect; 
     [SerializeField] private SpriteRenderer arrowSprite; 
     
@@ -18,16 +19,24 @@ public class Arrow : MonoBehaviour
     private float _time;
     private CombatObjectPool _pool;
     private OwnerType _owner;
-
+    private bool _hasReachedTarget;
+    private Vector3 _lastDirection;
+    private bool _isStopped;
     public void Initialize(Vector3 targetPos, CombatObjectPool pool, OwnerType owner)
     {
+        _isStopped = false;
         _start = transform.position;
         _target = targetPos;
         _pool = pool;
         _owner = owner;
+        
+        arrowSprite.color = new Color(1f, 1f, 1f, 1f);
+        arrowSprite.enabled = true;
+        
         float distance = Vector3.Distance(_start, _target);
         float arcHeight = distance * arcScale;
-
+        
+        _hasReachedTarget = false;
         _controlPoint = (_start + _target) / 2f + Vector3.up * arcHeight;
         _time = 0f;
         
@@ -45,24 +54,33 @@ public class Arrow : MonoBehaviour
 
     private void Update()
     {
-        if (_time < 1f)
+        if (_isStopped) return; 
+        
+        if (!_hasReachedTarget)
         {
-            _time += Time.deltaTime / duration;
-            Vector3 newPos = CalculateBezierPoint(_time);
-            
-            Vector3 direction = (newPos - transform.position).normalized;
-            if (direction != Vector3.zero)
+            if (_time < 1f)
             {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            }
+                _time += Time.deltaTime / duration;
+                Vector3 newPos = CalculateBezierPoint(_time);
 
-            transform.position = newPos;
+                Vector3 direction = (newPos - transform.position).normalized;
+                if (direction != Vector3.zero)
+                {
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                }
+
+                transform.position = newPos;
+                _lastDirection = direction; 
+            }
+            else
+            {
+                _hasReachedTarget = true;
+            }
         }
         else
         {
-            flashEffect.SetActive(true);
-            StartCoroutine(ReturnAfterFlash(flashDuration));
+            transform.position += _lastDirection * arrowSpeed * Time.deltaTime;
         }
     }
 
@@ -73,19 +91,34 @@ public class Arrow : MonoBehaviour
         return Vector3.Lerp(q0, q1, t);
     }
 
-    private IEnumerator ReturnAfterFlash(float delay)
+    private IEnumerator OnFlash(float delay)
     {
-        arrowSprite.enabled = false;
         flashEffect.SetActive(true);
         yield return new WaitForSeconds(delay);
         flashEffect.SetActive(false);
+    }
+    private IEnumerator FadeAndReturn(float delay)
+    {
+        _isStopped = true;
+
+        float elapsed = 0f;
+        Color color = arrowSprite.color;
+
+        while (elapsed < delay)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / delay); 
+            arrowSprite.color = new Color(color.r, color.g, color.b, alpha);
+            yield return null;
+        }
+
         _pool.Return(PoolType.Arrow, gameObject);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            StartCoroutine(ReturnAfterFlash(flashDuration));
+            StartCoroutine(FadeAndReturn(fadeDuration));
             return;
         }
         
@@ -95,14 +128,17 @@ public class Arrow : MonoBehaviour
                 return;
             
             shield.TakeDamage(damage);
-            StartCoroutine(ReturnAfterFlash(flashDuration));
+            
+            StartCoroutine(OnFlash(flashDuration));
+            StartCoroutine(FadeAndReturn(fadeDuration));
             return;
         }
         
         if (other.TryGetComponent(out Health health))
         {
             CombatSystem.Instance.DealDamage(other.gameObject, damage);
-            StartCoroutine(ReturnAfterFlash(flashDuration));
+            StartCoroutine(OnFlash(flashDuration));
         }
     }
+  
 }
