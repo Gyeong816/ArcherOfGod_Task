@@ -14,6 +14,12 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private float shakeDuration = 0.2f;
     [SerializeField] private float shakeMagnitude = 0.2f;
+
+    [SerializeField] private GameObject victoryPanel;
+    [SerializeField] private GameObject defeatPanel;
+    
+    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private CombatObjectPool combatObjectPool;
     
     [Header("라운드 시간 설정")]
     [SerializeField] private float roundTime = 90f;   
@@ -67,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     private void EndRound()
     {
-        Debug.Log("라운드 종료!");
+       StartCoroutine(SpawnMeteorRoutine());
     }
     
     public void RegisterShield(Shield shield)
@@ -106,9 +112,30 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void OnShieldHitGround()
+    private IEnumerator SpawnMeteorRoutine()
     {
-        StartCoroutine(CameraShake(shakeDuration, shakeMagnitude));
+        while (true) 
+        {
+            SpawnMeteor();
+            yield return new WaitForSeconds(1f);
+        }
+    }
+    
+    private void SpawnMeteor()
+    {
+        int index = UnityEngine.Random.Range(0, spawnPoints.Length);
+        Transform spawnPoint = spawnPoints[index];
+        
+        GameObject meteorObj = combatObjectPool.Get(PoolType.Meteor);
+        
+        Meteor meteor = meteorObj.GetComponent<Meteor>();
+        meteor.Initialize(combatObjectPool);
+        meteorObj.transform.position = spawnPoint.position;
+        meteorObj.SetActive(true);
+    }
+    public void ShakeCamera(float duration, float magnitude)
+    {
+        StartCoroutine(CameraShake(duration, magnitude));
     }
 
     private IEnumerator CameraShake(float duration, float magnitude)
@@ -133,13 +160,29 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("패배!");
         enemyController.OnVictory();
+        StartCoroutine(ShowResultPanel(false));
     }
 
     public void OnEnemyDead()
     {
         Debug.Log("승리!");
         playerController.OnVictory();
+        StartCoroutine(ShowResultPanel(true));
     }
-    
+    private IEnumerator ShowResultPanel(bool isVictory)
+    {
+        yield return new WaitForSeconds(2f); 
+
+        if (isVictory)
+        {
+            if (victoryPanel != null)
+                victoryPanel.SetActive(true);
+        }
+        else
+        {
+            if (defeatPanel != null)
+                defeatPanel.SetActive(true);
+        }
+    }
    
 }

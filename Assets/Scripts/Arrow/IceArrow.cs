@@ -96,6 +96,7 @@ public class IceArrow : MonoBehaviour
         arrowBody.SetActive(false);
         flashEffect.SetActive(true);
         yield return new WaitForSeconds(delay);
+        groundIce.SetActive(false);
         flashEffect.SetActive(false);
         _pool.Return(PoolType.IceArrow, gameObject);
     }
@@ -133,6 +134,7 @@ public class IceArrow : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             flashEffect.SetActive(true);
+            GameManager.Instance.ShakeCamera(0.1f, 0.1f);
             StartCoroutine(GroundIceAndReturn(groundIceDuration));
             return;
         }

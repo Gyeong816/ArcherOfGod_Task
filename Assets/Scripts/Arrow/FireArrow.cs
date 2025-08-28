@@ -96,6 +96,7 @@ public class FireArrow : MonoBehaviour
         arrowBody.SetActive(false);
         flashEffect.SetActive(true);
         yield return new WaitForSeconds(delay);
+        groundFire.SetActive(false);
         flashEffect.SetActive(false);
         _pool.Return(PoolType.FireArrow, gameObject);
     }
@@ -123,6 +124,7 @@ public class FireArrow : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             flashEffect.SetActive(true);
+            GameManager.Instance.ShakeCamera(0.1f, 0.1f);
             StartCoroutine(GroundFireAndRetrun(groundFireDuration));
             return;
         }

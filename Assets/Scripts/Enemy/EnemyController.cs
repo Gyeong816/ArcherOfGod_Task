@@ -166,7 +166,16 @@ public class EnemyController : MonoBehaviour
         {
             ApplyFreeze();
         }
+        
+        if (_currentState is EnemyPatrolState patrolState)
+        {
+            if (other.CompareTag("GroundFire") || other.CompareTag("GroundIce"))
+            {
+                patrolState.ReverseDirection();
+            }
+        }
     }
     
+  
     
 }

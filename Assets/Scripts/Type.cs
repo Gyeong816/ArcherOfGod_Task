@@ -13,6 +13,7 @@ public enum PoolType
     ShieldHpBar,
     FireArrow,
     IceArrow,
+    Meteor
 }
 
 public enum SkillType

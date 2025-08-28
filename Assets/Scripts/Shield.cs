@@ -84,7 +84,7 @@ public class Shield : MonoBehaviour
         {
             if (GameManager.Instance != null)
             {
-                GameManager.Instance.OnShieldHitGround();
+                GameManager.Instance.ShakeCamera(0.2f, 0.2f);
             }
         }
     }
