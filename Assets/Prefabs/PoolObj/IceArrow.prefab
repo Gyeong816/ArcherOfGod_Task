@@ -5250,7 +5250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 1.5
-  arcScale: 0.6
+  arcScale: 0.3
   arrowSpeed: 8
   damage: 5
   groundIceDuration: 5

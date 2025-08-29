@@ -16,6 +16,13 @@ public enum PoolType
     Meteor
 }
 
+public enum ArmorType
+{
+    None,         
+    DamageReduction, 
+    FireImmunity,    
+    IceImmunity     
+}
 public enum SkillType
 {
     StraightArrow,

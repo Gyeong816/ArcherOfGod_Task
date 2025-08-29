@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class Health : MonoBehaviour
 {
     [SerializeField] private int maxHp = 100;
     [SerializeField] private Slider hpSlider;
+    [SerializeField] private TextMeshProUGUI hpText; 
     [SerializeField] private CharacterType characterType;
     
     private int _currentHp;
@@ -24,7 +26,7 @@ public class Health : MonoBehaviour
         _currentHp = Mathf.Max(_currentHp, 0);
         
         hpSlider.value = _currentHp;
-
+        UpdateHpUI();
         if (_currentHp <= 0)
         {
             _currentHp = 0;
@@ -32,7 +34,10 @@ public class Health : MonoBehaviour
             Die();
         }
     }
-
+    private void UpdateHpUI()
+    {
+        hpText.text = $"{_currentHp}";
+    }
     public void GameOver()
     {
         _isGameOver = true;

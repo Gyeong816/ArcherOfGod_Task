@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour
     public float fireTime = 0.7f;
     public float moveSpeed = 2f;
 
-   // public int testSkillnum;
+    //public int testSkillnum;
     
     public Rigidbody2D Rigidbody2D { get; private set; }
     public Animator Animator { get; private set; }

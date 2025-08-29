@@ -21,7 +21,7 @@ public class SkillManager : MonoBehaviour
      private List<BaseSkill> _enemySkills = new List<BaseSkill>();
 
      public int EnemySkillCount => _enemySkills.Count;
-
+     private bool _isGameStarted;
     private void Awake()
     {
         _cooldownTexts.Clear();
@@ -42,6 +42,7 @@ public class SkillManager : MonoBehaviour
         {
             _enemySkills.Add(skills[i]);
         }
+        
     }
 
     private void Start()
@@ -50,11 +51,15 @@ public class SkillManager : MonoBehaviour
         {
             int skillNum = i; 
             skillButtons[i].onClick.AddListener(() => UsePlayerSkill(skillNum));
+            skillButtons[i].interactable = false;
+            _cooldownTexts[i].text = "";
         }
     }
 
     private void Update()
     {
+        if(!_isGameStarted) return;
+        
         for (int i = 0; i < _playerSkills.Count; i++)
         {
             BaseSkill skill = _playerSkills[i];
@@ -76,6 +81,10 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        _isGameStarted = true;
+    }
     private void UsePlayerSkill(int skillNum)
     {
         if (skillNum < 0 || skillNum >= _playerSkills.Count) return;

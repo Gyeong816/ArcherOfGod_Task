@@ -8,11 +8,16 @@ public class PlayerController : MonoBehaviour
     [Header("플레이어 설정")]
     [SerializeField] private float moveSpeed = 5f;
     
+    [Header("이동 버튼")]
+    [SerializeField] private HoldButton leftButton;
+    [SerializeField] private HoldButton rightButton;
+    
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
     [SerializeField] private float fireTime = 0.7f;
     
+    [SerializeField] private ArmorType currentArmor = ArmorType.None;
     
     [SerializeField] private int burnDamage = 5;    
     [SerializeField] private float burnInterval = 1f; 
@@ -60,7 +65,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
         
-        _moveInput = Input.GetAxisRaw("Horizontal");
+        float axisInput = Input.GetAxisRaw("Horizontal");
+        
+        float buttonInput = 0f;
+        if (leftButton.IsPressed) buttonInput = -1f;
+        if (rightButton.IsPressed) buttonInput = 1f;
+        
+        _moveInput = axisInput != 0 ? axisInput : buttonInput;
         
         if (_moveInput != 0f)
         {
@@ -78,6 +89,12 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
+    public void SetArmor(ArmorType armor)
+    {
+        currentArmor = armor;
+    }
+    
     private void FixedUpdate()
     {
         if (_isExecutingSkill || ! _isGameStarted)
@@ -198,6 +215,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Die()
     {
+        _isGameStarted = false;
         burnEffect.SetActive(false);
         freezeEffect.SetActive(false);
         _animator.SetTrigger(_isDeadHash);
@@ -213,10 +231,14 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("GroundFire"))
         {
+            if (currentArmor == ArmorType.IceImmunity)
+                return; 
             ApplyBurn();
         }
         if (other.CompareTag("GroundIce"))
         {
+            if (currentArmor == ArmorType.IceImmunity)
+                return; 
             ApplyFreeze();
         }
     }

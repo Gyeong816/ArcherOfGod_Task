@@ -21,7 +21,7 @@ public class Shield : MonoBehaviour
         if (GameManager.Instance != null)
             GameManager.Instance.UnregisterShield(this);
     }
-    public void Initialize(OwnerType owner, CombatObjectPool pool, Transform uiCanvas)
+    public void Initialize(OwnerType owner, CombatObjectPool pool, Transform hpPanel)
     {
         _owner = owner;
         _currentHp = maxHp;
@@ -31,7 +31,7 @@ public class Shield : MonoBehaviour
         
         GameManager.Instance.RegisterShield(this);
         
-        GameObject sliderObj = pool.GetUI(PoolType.ShieldHpBar, uiCanvas);
+        GameObject sliderObj = pool.GetUI(PoolType.ShieldHpBar, hpPanel);
         sliderObj.SetActive(true);
         
         _hpSlider = sliderObj.GetComponent<Slider>();

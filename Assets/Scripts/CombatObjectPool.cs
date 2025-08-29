@@ -13,7 +13,7 @@ public class CombatObjectPool : MonoBehaviour
     }
     
     [SerializeField] private List<PoolItem> poolItems;
-    [SerializeField] private Canvas canvas;
+    [SerializeField] private GameObject hpPanel;
     
 
     private Dictionary<PoolType, Queue<GameObject>> _pools = new Dictionary<PoolType, Queue<GameObject>>();
@@ -35,18 +35,18 @@ public class CombatObjectPool : MonoBehaviour
         }
     }
 
-    public Canvas GetCanvas()
+    public GameObject GetHpPanel()
     {
-        return canvas;
+        return hpPanel;
     }
     public GameObject Get(PoolType type)
     {
         return InternalGet(type, this.transform);
     }
     
-    public GameObject GetUI(PoolType type, Transform uiCanvas)
+    public GameObject GetUI(PoolType type, Transform panel)
     {
-        return InternalGet(type, uiCanvas);
+        return InternalGet(type, panel);
     }
 
     private GameObject InternalGet(PoolType type, Transform parent)

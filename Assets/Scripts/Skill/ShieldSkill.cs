@@ -13,20 +13,20 @@ public class ShieldSkill : BaseSkill
             GameObject shieldObj = pool.Get(PoolType.Shield); 
             shieldObj.transform.position = player.ShootPoint.position + Vector3.up * spawnHeight;
 
-            Canvas canvas = pool.GetCanvas();
+            GameObject hpPanel = pool.GetHpPanel();
             
             Shield shield = shieldObj.GetComponent<Shield>();
-            shield.Initialize(OwnerType.Player, pool, canvas.transform);
+            shield.Initialize(OwnerType.Player, pool, hpPanel.transform);
         }
         else if (characterType == CharacterType.Enemy)
         {
             GameObject shieldObj = pool.Get(PoolType.Shield);
             shieldObj.transform.position = enemy.ShootPoint.position + Vector3.up * spawnHeight;
             
-            Canvas canvas = pool.GetCanvas();
+            GameObject hpPanel = pool.GetHpPanel();
 
             Shield shield = shieldObj.GetComponent<Shield>();
-            shield.Initialize(OwnerType.Enemy, pool, canvas.transform);
+            shield.Initialize(OwnerType.Enemy, pool, hpPanel.transform);
         }
     }
 }

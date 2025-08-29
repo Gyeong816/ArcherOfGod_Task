@@ -13,12 +13,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform enemyTransform;
     [SerializeField] private UiManager uiManager;
-    
+    [SerializeField] private SkillManager skillManager;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
     
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private CombatObjectPool combatObjectPool;
+    [SerializeField] private GameObject endgameIcon;
     
     [Header("라운드 시간 설정")]
     [SerializeField] private float roundTime = 90f;   
@@ -70,13 +71,15 @@ public class GameManager : MonoBehaviour
     {
         _remainingTime = roundTime;
         _isRunning = true;
+        skillManager.StartGame();
         playerController.StartGame();
         enemyController.StartGame();
     }
 
     private void EndRound()
     {
-       StartCoroutine(SpawnMeteorRoutine());
+        endgameIcon.SetActive(true);
+        StartCoroutine(SpawnMeteorRoutine());
     }
     
     public void RegisterShield(Shield shield)
