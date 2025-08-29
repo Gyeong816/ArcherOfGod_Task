@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform enemyTransform;
-    [SerializeField] private UiManager uiManager;
+    [SerializeField] private CountDown countDown;
     [SerializeField] private SkillManager skillManager;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
@@ -20,12 +21,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private GameObject endgameIcon;
+    [SerializeField] private GameObject giftPanel;
+    [SerializeField] private float giftPanelTriggerTime = 60f; 
     
     [Header("라운드 시간 설정")]
     [SerializeField] private float roundTime = 90f;   
     private float _remainingTime;
     private bool _isRunning = false; 
     private Camera mainCamera;
+    private bool _giftPanelShown = false; 
     public static GameManager Instance { get; private set; }
 
     private List<Shield> _playerShields = new List<Shield>();
@@ -56,9 +60,14 @@ public class GameManager : MonoBehaviour
         if (_isRunning && _remainingTime > 0f)
         {
             _remainingTime -= Time.deltaTime;
-            
-            uiManager.UpdateTimerUI(_remainingTime);
+            countDown.UpdateTimerUI(_remainingTime);
 
+            if (!_giftPanelShown && _remainingTime <= giftPanelTriggerTime)
+            {
+                _giftPanelShown = true;
+                giftPanel.gameObject.SetActive(true); 
+                Time.timeScale = 0f;
+            }
             if (_remainingTime <= 0f)
             {
                 _isRunning = false;
@@ -199,6 +208,79 @@ public class GameManager : MonoBehaviour
         {
             if (defeatPanel != null)
                 defeatPanel.SetActive(true);
+        }
+    }
+
+    public void SetPlayerArmor(ArmorType armor)
+    {
+        switch (armor)
+        {
+            case ArmorType.DamageReduction:
+                playerHealth.SetDamageMultiplier(0.7f);
+                break;
+            case ArmorType.FireImmunity:
+                playerController.SetArmor(armor);
+                break;
+            case ArmorType.IceImmunity:
+                playerController.SetArmor(armor);
+                break;
+            default:
+                break;
+   
+        }
+        
+    }
+
+    public void SetEnemyArmor(ArmorType armor)
+    {
+        switch (armor)
+        {
+            case ArmorType.DamageReduction:
+                enemyHealth.SetDamageMultiplier(0.7f);
+                break;
+            case ArmorType.FireImmunity:
+                enemyController.SetArmor(armor);
+                break;
+            case ArmorType.IceImmunity:
+                enemyController.SetArmor(armor);
+                break;
+            default:
+                break;
+        }
+    }
+    public void SetPlayerBuffAttack(AttackBuffType attack)
+    {
+        switch (attack)
+        {
+            case AttackBuffType.Physical:
+                enemyHealth.SetDamageMultiplier(1.7f);
+                break;
+            case AttackBuffType.Fire:
+                enemyController.SetNerf(attack);
+                break;
+            case AttackBuffType.Ice:
+                enemyController.SetNerf(attack);
+                break;
+            default:
+                break;
+        }
+    }
+    
+    public void SetEnemyBuffAttack(AttackBuffType attack)
+    {
+        switch (attack)
+        {
+            case AttackBuffType.Physical:
+                playerHealth.SetDamageMultiplier(1.5f);
+                break;
+            case AttackBuffType.Fire:
+                playerController.SetNerf(attack);
+                break;
+            case AttackBuffType.Ice:
+                playerController.SetNerf(attack);
+                break;
+            default:
+                break;
         }
     }
    

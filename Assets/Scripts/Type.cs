@@ -23,12 +23,15 @@ public enum ArmorType
     FireImmunity,    
     IceImmunity     
 }
-public enum SkillType
+
+public enum AttackBuffType
 {
-    StraightArrow,
-    JumpShot,
-    Fireball,
+    None,
+    Physical,
+    Fire,
+    Ice
 }
+
 
 public enum OwnerType
 {

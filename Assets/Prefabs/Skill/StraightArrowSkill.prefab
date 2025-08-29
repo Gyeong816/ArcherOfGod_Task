@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536ffd4a6bbb06d4caa563fcb9819e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillType: 0
-  cooldown: 3
+  cooldown: 12
   spawnTime: 0.6
   animName: StraightAttack

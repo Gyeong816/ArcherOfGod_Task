@@ -96,7 +96,7 @@ MonoBehaviour:
   meteorBody: {fileID: 8881881712215609441}
   flashEffect: {fileID: 4178213947628585584}
   flashDuration: 2.5
-  damage: 30
+  damage: 300
 --- !u!50 &1134551273454220793
 Rigidbody2D:
   serializedVersion: 4

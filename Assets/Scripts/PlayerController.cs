@@ -5,48 +5,60 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("플레이어 설정")]
+    [Header("플레이어 이동 설정")]
     [SerializeField] private float moveSpeed = 5f;
-    
+
     [Header("이동 버튼")]
     [SerializeField] private HoldButton leftButton;
     [SerializeField] private HoldButton rightButton;
-    
+
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
     [SerializeField] private Transform shootPoint;   
-    [SerializeField] private float fireTime = 0.7f;
-    
+    [SerializeField] private float fireTime = 0.6f;
+
+    [Header("방어구 및 상태")]
     [SerializeField] private ArmorType currentArmor = ArmorType.None;
-    
-    [SerializeField] private int burnDamage = 5;    
+
+    [Header("불 상태이상")]
+    [SerializeField] private int burnDamage = 20;    
     [SerializeField] private float burnInterval = 1f; 
     [SerializeField] private float burnDuration = 5f; 
     [SerializeField] private GameObject burnEffect; 
-    
-    [SerializeField] private float freezeDuration = 3f; 
-    [SerializeField] private float freezeSlowMultiplier = 0.5f; 
+
+    [Header("얼음 상태이상")]
+    [SerializeField] private float freezeDuration = 5f; 
+    [SerializeField] private float freezeSlowMultiplier = 0.3f; 
     [SerializeField] private GameObject freezeEffect;
-    
-    
-    public Transform  targetTransform;
-    public Transform  ShootPoint => shootPoint;
+
+    // === 공개 프로퍼티 ===
+    public Transform targetTransform;
+    public Transform ShootPoint => shootPoint;
     public Animator Animator => _animator;
     public Rigidbody2D Rigidbody2D => _rigidbody2D;
-    
+
+    // === 내부 상태 플래그 ===
     private bool _isBurning = false;
     private bool _hasFired = false;
+    private bool _isExecutingSkill = false;
+    private bool _isFrozen = false;
+    private bool _isGameStarted = false;
+
+    // === 컴포넌트 캐싱 ===
     private Rigidbody2D _rigidbody2D;
-    private float _moveInput;
     private Animator _animator;
+
+    // === 애니메이터 해시값 ===
     private int _isWalkingHash;
     private int _isDeadHash;
     private int _victory;
     private int _attack;
+
+    // === 스킬 관련 ===
     private Queue<ICommand> skillQueue = new Queue<ICommand>();
-    private bool _isExecutingSkill = false;
-    private bool _isFrozen = false;
-    private bool _isGameStarted = false;
+
+    // === 입력 처리 ===
+    private float _moveInput;
 
     private void Awake()
     {
@@ -114,7 +126,18 @@ public class PlayerController : MonoBehaviour
     {
         skillQueue.Enqueue(skillCommand);
     }
-    
+    public void SetNerf(AttackBuffType attackType)
+    {
+        switch (attackType)
+        {
+            case AttackBuffType.Fire:
+                burnDuration *= 2;
+                break;
+            case AttackBuffType.Ice:
+                freezeDuration *= 2;
+                break;
+        }
+    }
     private IEnumerator ProcessSkill(ICommand skill)
     {
         _isExecutingSkill = true;
@@ -231,7 +254,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("GroundFire"))
         {
-            if (currentArmor == ArmorType.IceImmunity)
+            if (currentArmor == ArmorType.FireImmunity)
                 return; 
             ApplyBurn();
         }

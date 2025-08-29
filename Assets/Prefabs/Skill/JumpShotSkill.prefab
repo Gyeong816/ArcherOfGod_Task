@@ -44,8 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7587feff89bdade4397aa1f6942105e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillType: 1
-  cooldown: 3
+  cooldown: 5
   spawnTime: 0
   animName: JumpShot
   jumpForce: 10

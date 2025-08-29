@@ -5252,7 +5252,7 @@ MonoBehaviour:
   duration: 1.5
   arcScale: 0.3
   arrowSpeed: 8
-  damage: 5
+  damage: 20
   groundIceDuration: 5
   groundIce: {fileID: 2291546795665158845}
   arrowBody: {fileID: 7632208402452796659}

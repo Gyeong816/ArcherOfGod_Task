@@ -4842,7 +4842,7 @@ MonoBehaviour:
   duration: 1.5
   arcScale: 0.6
   arrowSpeed: 8
-  damage: 5
+  damage: 15
   flashDuration: 0.5
   fadeDuration: 1
   flashEffect: {fileID: 6693262758488171164}

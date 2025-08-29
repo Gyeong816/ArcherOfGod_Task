@@ -19798,7 +19798,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  damage: 20
+  damage: 100
   lifeTime: 4
   flashEffect: {fileID: 7417741353067528303}
   arrowBody: {fileID: 7632208402452796659}

@@ -11,8 +11,9 @@ public class Health : MonoBehaviour
     [SerializeField] private TextMeshProUGUI hpText; 
     [SerializeField] private CharacterType characterType;
     
-    private int _currentHp;
+    private float _currentHp;
     private bool _isGameOver = false;
+    private float _damageMultiplier = 1f; 
     private void Awake()
     {
         _currentHp = maxHp;
@@ -22,7 +23,7 @@ public class Health : MonoBehaviour
     {
         if(_isGameOver) return;
         
-        _currentHp -= damage;
+        _currentHp -= damage * _damageMultiplier;
         _currentHp = Mathf.Max(_currentHp, 0);
         
         hpSlider.value = _currentHp;
@@ -33,6 +34,11 @@ public class Health : MonoBehaviour
 
             Die();
         }
+    }
+
+    public void SetDamageMultiplier(float damageMultiplier)
+    {
+        _damageMultiplier = damageMultiplier;
     }
     private void UpdateHpUI()
     {

@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3c295443bc7d7c479a00001ae9ca882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 3
+  cooldown: 7
   spawnTime: 0.6
   animName: IceArrow

@@ -30042,7 +30042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 12
-  damage: 10
+  damage: 20
   maxLifeTime: 5
   flashEffect: {fileID: 3091221757501671712}
   arrowBody: {fileID: 7632208402452796659}

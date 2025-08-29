@@ -8,7 +8,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private SkillManager skillManager;
     [Header("활 설정")]
     [SerializeField] private CombatObjectPool combatObjectPool;
-    [SerializeField] private Transform shootPoint;   
+    [SerializeField] private Transform shootPoint; 
+    [SerializeField] private ArmorType currentArmor = ArmorType.None;
+    public ArmorType CurrentArmor => currentArmor;
     public Transform ShootPoint => shootPoint;
     
     public SkillManager SkillManager => skillManager;
@@ -17,8 +19,8 @@ public class EnemyController : MonoBehaviour
     
     public float moveDurationMax = 4f;
     public float moveDurationMin = 1f;
-    public float attackDurationMax = 4f;
-    public float attackDurationMin = 1f;
+    public float attackDurationMax = 5f;
+    public float attackDurationMin = 3f;
     public float fireTime = 0.7f;
     public float moveSpeed = 2f;
 
@@ -37,11 +39,11 @@ public class EnemyController : MonoBehaviour
     [Header("상태이상: 화상")]
     [SerializeField] private int burnDamage = 3;
     [SerializeField] private float burnInterval = 1f;
-    [SerializeField] private float burnDuration = 3f;
+    [SerializeField] private float burnDuration = 5f;
     [SerializeField] private GameObject burnEffect;
 
     [Header("상태이상: 동상")]
-    [SerializeField] private float freezeDuration = 2f;
+    [SerializeField] private float freezeDuration = 3f;
     [SerializeField] private float freezeSlowMultiplier = 0.3f;
     [SerializeField] private GameObject freezeEffect;
 
@@ -79,6 +81,24 @@ public class EnemyController : MonoBehaviour
         _currentState?.ExitState(this);
         _currentState = newState;
         _currentState?.EnterState(this);
+    }
+
+    public void SetNerf(AttackBuffType attackType)
+    {
+        switch (attackType)
+        {
+            case AttackBuffType.Fire:
+                burnDuration *= 2;
+                break;
+            case AttackBuffType.Ice:
+                freezeDuration *= 2;
+                break;
+        }
+    }
+    
+    public void SetArmor(ArmorType armor)
+    {
+        currentArmor = armor;
     }
 
     public void StartGame()
@@ -144,11 +164,11 @@ public class EnemyController : MonoBehaviour
         if (freezeEffect != null) freezeEffect.SetActive(true);
 
         _originalMoveSpeed = moveSpeed;
-        moveSpeed *= freezeSlowMultiplier;   // 이동 속도 감소
+        moveSpeed *= freezeSlowMultiplier;   
 
         yield return new WaitForSeconds(freezeDuration);
 
-        moveSpeed = _originalMoveSpeed;      // 복구
+        moveSpeed = _originalMoveSpeed;    
         if (freezeEffect != null) freezeEffect.SetActive(false);
         _isFrozen = false;
     }
@@ -168,10 +188,14 @@ public class EnemyController : MonoBehaviour
     {
         if (other.CompareTag("GroundFire"))
         {
+            if (currentArmor == ArmorType.FireImmunity)
+                return; 
             ApplyBurn();
         }
         if (other.CompareTag("GroundIce"))
         {
+            if (currentArmor == ArmorType.IceImmunity)
+                return; 
             ApplyFreeze();
         }
         

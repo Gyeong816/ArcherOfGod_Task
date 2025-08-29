@@ -19760,7 +19760,7 @@ MonoBehaviour:
   duration: 1.5
   arcScale: 0.5
   arrowSpeed: 8
-  damage: 5
+  damage: 20
   groundFireDuration: 5
   groundFire: {fileID: 742364958335842390}
   arrowBody: {fileID: 7632208402452796659}
