@@ -416,7 +416,7 @@ GameObject:
   m_Component:
   - component: {fileID: 162181081}
   - component: {fileID: 162181080}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider (1)
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -665,10 +665,8 @@ Transform:
   - {fileID: 500495195}
   - {fileID: 1870845632}
   - {fileID: 1548513032}
-  - {fileID: 1593985887}
   - {fileID: 2038665698}
   - {fileID: 1585834518}
-  - {fileID: 871669633}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &249787133
@@ -1055,7 +1053,7 @@ Transform:
   m_GameObject: {fileID: 376360947}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0, z: 0}
   m_LocalScale: {x: 1.4, y: 1.24, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1533,7 +1531,7 @@ GameObject:
   m_Component:
   - component: {fileID: 485668199}
   - component: {fileID: 485668198}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider (2)
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -2683,37 +2681,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1082708004}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &871669632
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 871669633}
-  m_Layer: 0
-  m_Name: MeteorSpawnPoint (6)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &871669633
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871669632}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.739776, y: 7.793746, z: 0.028143018}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 214310327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901928033
 GameObject:
@@ -8027,7 +7994,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1128267421}
   - component: {fileID: 1128267422}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -8278,8 +8245,86 @@ Transform:
   - {fileID: 1128267421}
   - {fileID: 162181081}
   - {fileID: 485668199}
+  - {fileID: 1196129533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1196129532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1196129533}
+  - component: {fileID: 1196129534}
+  m_Layer: 0
+  m_Name: ObjectDestroyZone
+  m_TagString: ObjectDestroyZone
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1196129533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196129532}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1163064898}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1196129534
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196129532}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -7.99}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 25, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1199570266
 GameObject:
   m_ObjectHideFlags: 0
@@ -9029,7 +9074,7 @@ Animator:
   m_GameObject: {fileID: 1511358635}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 64f1a3e5d3dd4524b93b850d28624294, type: 2}
+  m_Controller: {fileID: 9100000, guid: 08bb22281c3ce3c4cba1a205a33a338c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -9078,7 +9123,6 @@ MonoBehaviour:
   attackDurationMin: 1
   fireTime: 0.7
   moveSpeed: 2
-  testSkillnum: 4
   burnDamage: 3
   burnInterval: 1
   burnDuration: 3
@@ -14426,37 +14470,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 214310327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1593985886
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1593985887}
-  m_Layer: 0
-  m_Name: MeteorSpawnPoint (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1593985887
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593985886}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.260224, y: 7.793746, z: 0.028143018}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 214310327}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1681184939
 GameObject:
   m_ObjectHideFlags: 0
@@ -15290,23 +15303,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 95000012644383836}
   enemyController: {fileID: 1511358640}
+  playerHealth: {fileID: 95000012644383837}
+  enemyHealth: {fileID: 1511358641}
   playerTransform: {fileID: 1199890516}
   enemyTransform: {fileID: 120263401}
   uiManager: {fileID: 791352245}
-  shakeDuration: 0.2
-  shakeMagnitude: 0.2
   victoryPanel: {fileID: 1256784291}
   defeatPanel: {fileID: 1519205858}
   spawnPoints:
   - {fileID: 500495195}
   - {fileID: 1870845632}
   - {fileID: 1548513032}
-  - {fileID: 1593985887}
   - {fileID: 2038665698}
   - {fileID: 1585834518}
-  - {fileID: 871669633}
   combatObjectPool: {fileID: 1731229807}
-  roundTime: 10
+  roundTime: 5
 --- !u!4 &2009129927
 Transform:
   m_ObjectHideFlags: 0

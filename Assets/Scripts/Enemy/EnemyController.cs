@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour
     public float fireTime = 0.7f;
     public float moveSpeed = 2f;
 
-    public int testSkillnum;
+   // public int testSkillnum;
     
     public Rigidbody2D Rigidbody2D { get; private set; }
     public Animator Animator { get; private set; }
@@ -32,6 +32,7 @@ public class EnemyController : MonoBehaviour
 
     private IEnemyState _currentState;
     private Collider2D _collider;
+    private bool _isGameStarted = false;
     
     [Header("상태이상: 화상")]
     [SerializeField] private int burnDamage = 3;
@@ -47,7 +48,7 @@ public class EnemyController : MonoBehaviour
     private bool _isBurning = false;
     private bool _isFrozen = false;
     private float _originalMoveSpeed;
-    
+    private int _attackHash;
     private void Awake()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -55,19 +56,19 @@ public class EnemyController : MonoBehaviour
         IsWalkingHash = Animator.StringToHash("IsWalking");
         IsDeadHash = Animator.StringToHash("IsDead");
         VictoryHash = Animator.StringToHash("Victory");
+        _attackHash = Animator.StringToHash("Attack"); 
     }
 
-    private void Start()
-    {
-        ChangeState(new EnemyAttackState()); 
-    }
+
     private void Update()
     {
+        if (!_isGameStarted) return; 
         _currentState?.UpdateState(this);
     }
     
     private void FixedUpdate()
     {
+        if (!_isGameStarted) return; 
         if (_currentState is IEnemyPhysicsState physicsState)
         {
             physicsState.FixedUpdateState(this);
@@ -80,6 +81,12 @@ public class EnemyController : MonoBehaviour
         _currentState?.EnterState(this);
     }
 
+    public void StartGame()
+    {
+        _isGameStarted = true;
+        Animator.SetTrigger(_attackHash);    
+        ChangeState(new EnemyAttackState());  
+    }
     public void FireArrow()
     {
         GameObject arrowObj = combatObjectPool.Get(PoolType.Arrow);
@@ -98,6 +105,7 @@ public class EnemyController : MonoBehaviour
     
     public void OnVictory()
     {
+        _isGameStarted = false;
         ChangeState(new EnemyVictoryState());
     }
     

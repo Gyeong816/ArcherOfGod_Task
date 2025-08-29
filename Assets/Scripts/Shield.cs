@@ -87,5 +87,11 @@ public class Shield : MonoBehaviour
                 GameManager.Instance.ShakeCamera(0.2f, 0.2f);
             }
         }
+        
+        if (collision.gameObject.CompareTag("ObjectDestroyZone"))
+        {
+            _pool.Return(PoolType.Shield, gameObject);
+            return;
+        }
     }
 }

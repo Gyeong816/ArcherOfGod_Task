@@ -14,13 +14,13 @@ public class EnemySkillState : IEnemyState
     
     public void EnterState(EnemyController enemy)
     {
-       // int randomNum = UnityEngine.Random.Range(0,enemy.SkillManager.EnemySkillCount); 
+        int randomNum = UnityEngine.Random.Range(0,enemy.SkillManager.EnemySkillCount); 
         
         _enemy = enemy;
         _pool = enemy.CombatObjectPool;
-      //  _skill = enemy.SkillManager.GetEnemySkill(randomNum);
+        _skill = enemy.SkillManager.GetEnemySkill(randomNum);
         
-        _skill = enemy.SkillManager.GetEnemySkill(enemy.testSkillnum);
+       // _skill = enemy.SkillManager.GetEnemySkill(enemy.testSkillnum);
         _spawnTime = _skill.spawnTime;
         
         Animator anim = enemy.Animator;

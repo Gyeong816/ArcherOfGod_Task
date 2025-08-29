@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - GroundFire
   - GroundIce
+  - ObjectDestroyZone
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - UI
   - Character
   - Item
-  - 
+  - Boundary
   - 
   - 
   - 

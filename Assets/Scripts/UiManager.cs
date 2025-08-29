@@ -33,7 +33,7 @@ public class UiManager : MonoBehaviour
 
         numberImage.enabled = false;
         
-        GameManager.Instance.StartTimer();
+        GameManager.Instance.StartGame();
     }
 
     private IEnumerator FadeImage(float from, float to, float duration)

@@ -37,9 +37,11 @@ public class PlayerController : MonoBehaviour
     private int _isWalkingHash;
     private int _isDeadHash;
     private int _victory;
+    private int _attack;
     private Queue<ICommand> skillQueue = new Queue<ICommand>();
-    private bool isExecutingSkill = false;
+    private bool _isExecutingSkill = false;
     private bool _isFrozen = false;
+    private bool _isGameStarted = false;
 
     private void Awake()
     {
@@ -48,12 +50,13 @@ public class PlayerController : MonoBehaviour
         _isWalkingHash = Animator.StringToHash("IsWalking");
         _isDeadHash = Animator.StringToHash("IsDead");
         _victory = Animator.StringToHash("Victory");
+        _attack = Animator.StringToHash("Attack");
     }
 
     private void Update()
     {
-        if (isExecutingSkill)
-        { ; 
+        if (_isExecutingSkill || ! _isGameStarted)
+        { 
             return;
         }
         
@@ -75,12 +78,21 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
     private void FixedUpdate()
     {
+        if (_isExecutingSkill || ! _isGameStarted)
+        { 
+            return;
+        }
+        
         _rigidbody2D.velocity = new Vector2(_moveInput * moveSpeed, _rigidbody2D.velocity.y);
     }
     
+    public void StartGame()
+    {
+        _animator.SetTrigger(_attack);
+        _isGameStarted = true;
+    }
     public void EnqueueSkill(ICommand skillCommand)
     {
         skillQueue.Enqueue(skillCommand);
@@ -88,9 +100,9 @@ public class PlayerController : MonoBehaviour
     
     private IEnumerator ProcessSkill(ICommand skill)
     {
-        isExecutingSkill = true;
+        _isExecutingSkill = true;
         yield return StartCoroutine(skill.Execute(this));
-        isExecutingSkill = false;
+        _isExecutingSkill = false;
     }
     
     private void Move()
@@ -193,6 +205,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnVictory()
     {
+        _isGameStarted = false;
         _animator.SetTrigger(_victory);
     }
     

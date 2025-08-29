@@ -7,14 +7,13 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
     [SerializeField] private EnemyController enemyController;
-
+    [SerializeField] private Health playerHealth;
+    [SerializeField] private Health enemyHealth;
+    
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform enemyTransform;
     [SerializeField] private UiManager uiManager;
     
-    [SerializeField] private float shakeDuration = 0.2f;
-    [SerializeField] private float shakeMagnitude = 0.2f;
-
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
     
@@ -33,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     public Transform PlayerTarget { get; private set; }
     public Transform EnemyTarget { get; private set; }
+
+    private bool _isGameOver = false;
 
     private void Awake()
     {
@@ -65,10 +66,12 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void StartTimer()
+    public void StartGame()
     {
         _remainingTime = roundTime;
         _isRunning = true;
+        playerController.StartGame();
+        enemyController.StartGame();
     }
 
     private void EndRound()
@@ -114,7 +117,7 @@ public class GameManager : MonoBehaviour
     
     private IEnumerator SpawnMeteorRoutine()
     {
-        while (true) 
+        while (!_isGameOver) 
         {
             SpawnMeteor();
             yield return new WaitForSeconds(1f);
@@ -130,7 +133,10 @@ public class GameManager : MonoBehaviour
         
         Meteor meteor = meteorObj.GetComponent<Meteor>();
         meteor.Initialize(combatObjectPool);
-        meteorObj.transform.position = spawnPoint.position;
+        
+        float xOffset = UnityEngine.Random.Range(-1f, 1f);  
+        Vector3 spawnPos = spawnPoint.position + new Vector3(xOffset, 0f, 0f);
+        meteorObj.transform.position = spawnPos;
         meteorObj.SetActive(true);
     }
     public void ShakeCamera(float duration, float magnitude)
@@ -158,14 +164,22 @@ public class GameManager : MonoBehaviour
     }
     public void OnPlayerDead()
     {
-        Debug.Log("패배!");
+        if (_isGameOver) return; 
+        
+        _isGameOver = true;
+        enemyHealth.GameOver();
+        playerHealth.GameOver();
         enemyController.OnVictory();
         StartCoroutine(ShowResultPanel(false));
     }
 
     public void OnEnemyDead()
     {
-        Debug.Log("승리!");
+        if (_isGameOver) return; 
+        
+        _isGameOver = true;
+        enemyHealth.GameOver();
+        playerHealth.GameOver();
         playerController.OnVictory();
         StartCoroutine(ShowResultPanel(true));
     }
